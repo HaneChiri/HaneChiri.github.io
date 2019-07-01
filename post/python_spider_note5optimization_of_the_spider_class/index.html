@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false,"dimmer":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="打算全部以cookie来登陆，而不依赖于session（因为听组长说session没cookie快，而且我想学些新东西而不是翻来覆去地在舒适区鼓捣）。弄了几天终于弄出来个代码不那么混乱的爬虫类了，更新一下博文来总结一下。代码在我github的spider库里面。">
+<meta name="keywords" content="python,爬虫">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python爬虫学习笔记5爬虫类结构优化">
+<meta property="og:url" content="https://hanechiri.github.io/post/python_spider_note5optimization_of_the_spider_class/index.html">
+<meta property="og:site_name" content="尘世未解">
+<meta property="og:description" content="打算全部以cookie来登陆，而不依赖于session（因为听组长说session没cookie快，而且我想学些新东西而不是翻来覆去地在舒适区鼓捣）。弄了几天终于弄出来个代码不那么混乱的爬虫类了，更新一下博文来总结一下。代码在我github的spider库里面。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-26T14:55:36.342Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python爬虫学习笔记5爬虫类结构优化">
+<meta name="twitter:description" content="打算全部以cookie来登陆，而不依赖于session（因为听组长说session没cookie快，而且我想学些新东西而不是翻来覆去地在舒适区鼓捣）。弄了几天终于弄出来个代码不那么混乱的爬虫类了，更新一下博文来总结一下。代码在我github的spider库里面。">
+
+
+
+
+
+
+  <link rel="canonical" href="https://hanechiri.github.io/post/python_spider_note5optimization_of_the_spider_class/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>python爬虫学习笔记5爬虫类结构优化 | 尘世未解</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">尘世未解</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">过去不可追，未来尚可为</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-留言">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="https://github.com/HaneChiri/HaneChiri.github.io/issues" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>留言</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-解决方案">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/solution/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>解决方案</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hanechiri.github.io/post/python_spider_note5optimization_of_the_spider_class/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="憧憬少">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="尘世未解">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python爬虫学习笔记5爬虫类结构优化
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-21 12:44:01" itemprop="dateCreated datePublished" datetime="2019-04-21T12:44:01+08:00">2019-04-21</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-26 22:55:36" itemprop="dateModified" datetime="2019-06-26T22:55:36+08:00">2019-06-26</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/项目总结/" itemprop="url" rel="index"><span itemprop="name">项目总结</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/post/python_spider_note5optimization_of_the_spider_class/" class="leancloud_visitors" data-flag-title="python爬虫学习笔记5爬虫类结构优化">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>打算全部以cookie来登陆，而不依赖于session（因为听组长说session没cookie快，而且我想学些新东西而不是翻来覆去地在舒适区鼓捣）。弄了几天终于弄出来个代码不那么混乱的爬虫类了，更新一下博文来总结一下。代码在我github的spider库里面。</p>
+<a id="more"></a>
+<h1 id="初步思路"><a href="#初步思路" class="headerlink" title="初步思路"></a>初步思路</h1><p>既然要封装成爬虫类，那么就以面向对象的思维来思考一下结构。</p>
+<p>从通用的爬虫开始，先不考虑如何爬取特定的网站。</p>
+<p>以下只是刚开始的思路，并不是最终思路。</p>
+<p>爬虫的行为步骤并不复杂，分为以下几步：</p>
+<ol>
+<li>请求并获取网页（往往需要模拟登录）</li>
+<li>解析网页提取内容（还需要先获取需要爬取的url）</li>
+<li>保存内容（保存到数据库）</li>
+</ol>
+<p>爬虫类方法（初步设计）：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>login</td>
+<td>登录</td>
+</tr>
+<tr>
+<td>parse</td>
+<td>解析</td>
+</tr>
+<tr>
+<td>save</td>
+<td>保存</td>
+</tr>
+<tr>
+<td>crawl</td>
+<td>爬取（外部调用者只需调用这个方法即可）</td>
+</tr>
+</tbody>
+</table>
+<p>爬虫类属性（初步设计）：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>headers</td>
+<td>请求的头部信息，用于伪装成浏览器</td>
+</tr>
+<tr>
+<td>cookies</td>
+<td>保存登录后得到的cookies</td>
+</tr>
+<tr>
+<td>db_data</td>
+<td>数据库的信息，用于连接数据库</td>
+</tr>
+</tbody>
+</table>
+<h1 id="进一步设计"><a href="#进一步设计" class="headerlink" title="进一步设计"></a>进一步设计</h1><p>我想将这个爬虫类设计得更为通用，也就是只修改解析的部分就能爬取不同的网站。组长说我这是打算写一个爬虫框架，我可没那么厉害，只是觉得把逻辑写死不能通用的类根本不能叫做类罢了。</p>
+<h2 id="参考代码"><a href="#参考代码" class="headerlink" title="参考代码"></a>参考代码</h2><p>我看了一下组长给出的参考代码，大致结构是这样的：</p>
+<p>首先一个<code>Parse</code>解析类（为了关注结构，具体内容省略）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Parse</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse_index</span><span class="params">(self,text)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        用于解析首页</span></span><br><span class="line"><span class="string">        :param text: 抓取到的文本</span></span><br><span class="line"><span class="string">        :return: cpatcha_url, 一个由元组构成的列表(元组由两个元素组成 (代号，学校名称))</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">       <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse_captcha</span><span class="params">(self, content, client)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        解析验证码</span></span><br><span class="line"><span class="string">        :return: &lt;int&gt; or &lt;str&gt; a code</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse_info</span><span class="params">(self, text)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        解析出基本信息</span></span><br><span class="line"><span class="string">        :param text:</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse_current_record</span><span class="params">(self, text)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        解析消费记录</span></span><br><span class="line"><span class="string">        :param text:</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        <span class="keyword">return</span> self.parse_info(text)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse_history_record</span><span class="params">(self, text)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        解析历史消费记录</span></span><br><span class="line"><span class="string">        :param text:</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        <span class="keyword">return</span> self.parse_info(text)</span><br></pre></td></tr></table></figure>
+<p>这个思路不错，<strong>将解析部分独立形成一个类</strong>，不过这样要如何与爬虫类进行逻辑上的关联呢？解析类的对象，是什么？是解析器吗？解析器与爬虫应该是什么关系呢？</p>
+<p>我继续往下看：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Prepare</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">login_data</span><span class="params">(self,username, password, captcha, schoolcode, signtype)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        构造登陆使用的参数</span></span><br><span class="line"><span class="string">        :return:data</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        <span class="keyword">pass</span><span class="comment">#省略代码，下同</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">history_record_data</span><span class="params">(self, beginTime, endTime)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        历史消费记录data</span></span><br><span class="line"><span class="string">        :param beginTime:</span></span><br><span class="line"><span class="string">        :param endTime:</span></span><br><span class="line"><span class="string">        :return: data</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>这是一个<code>Prepare</code>类，准备类？准备登录用的数据。说起来似乎比解析类更难以让我接受。解析器还可以说是装在爬虫身上，但是，但是“准备”这件事情分明是一个动作啊喂！</p>
+<p>好吧，“一类动作”倒能说得过去吧。我看看怎么和爬虫类联系起来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Spider</span><span class="params">(Parse, Prepare)</span>:</span><span class="comment">#???</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>等会儿等会儿……</p>
+<p>继承关系？</p>
+<p>让我捋捋。</p>
+<p>为了让爬虫能解析和能准备还真是不按套路出牌啊……</p>
+<p>子类应该是父类的特化吧不是吗，就像猫类继承动物类，汽车类继承车类一样，猫是动物，汽车也是车。</p>
+<p>算了不继续了，毕竟我不是为了故意和我组长作对。只是将其作为一个例子来说明我的思路。</p>
+<h2 id="解析器类"><a href="#解析器类" class="headerlink" title="解析器类"></a>解析器类</h2><p>参考代码虽然不太能让我接受，但是它的结构仍然带给了我一定启发。就是解析函数不一定要作为爬虫的方法。</p>
+<p>解析这个步骤如果真的只写在一个函数里面真的非常非常乱，因为解析不只一个函数。比如解析表单的隐藏域，解析页面的url，解析页面内容等。</p>
+<p>单独写一个解析类也可以。至于它和爬虫类的关系，我觉得<strong>组合关系</strong>更为合适（想象出了一只蜘蛛身上背着一个红外透视仪的样子），spider的解析器可以更换，这样子我觉着更符合逻辑一些。</p>
+<p>关于更换解析器的方式，我打算先写一个通用的解析器类作为基类，而后派生出子解析器类，子解析器根据不同的网站采取不同的解析行为。</p>
+<p>然后新建<code>my_parser.py</code>文件，写了一个<code>MyParser</code>类。解析方式是xpath和beautifulsoup。这里面的代码是我把已经用于爬取学校网站的特定代码通用化之后的示例代码，实际上并不会被调用，只是统一接口，用的时候会新写一个类继承它，并覆盖里面的函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyParser</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">login_data_parser</span><span class="params">(self,login_url)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        This parser is for chd</span></span><br><span class="line"><span class="string">        :param url: the url you want to login</span></span><br><span class="line"><span class="string">        :return (a dict with login data,cookies)</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        response=requests.get(login_url)</span><br><span class="line">        html=response.text</span><br><span class="line">        <span class="comment"># parse the html</span></span><br><span class="line">        soup=BeautifulSoup(html,<span class="string">'lxml'</span>)</span><br><span class="line">        <span class="comment">#insert parser,following is an example</span></span><br><span class="line">        example_data=soup.find(<span class="string">'input'</span>,&#123;<span class="string">'name'</span>: <span class="string">'example_data'</span>&#125;)[<span class="string">'value'</span>]</span><br><span class="line">        login_data=&#123;</span><br><span class="line">            <span class="string">'example_data'</span>:example_data</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> login_data,response.cookies</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">uni_parser</span><span class="params">(self,url,xpath,**kwargs)</span>:</span></span><br><span class="line">        response=requests.post(url,**kwargs)</span><br><span class="line">        html=response.text</span><br><span class="line">        tree=etree.HTML(html)</span><br><span class="line">        result_list=tree.xpath(xpath)</span><br><span class="line">        <span class="keyword">return</span> result_list</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_urls</span><span class="params">(self,catalogue_url,**kwargs)</span>:</span></span><br><span class="line"></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        get all urls that needs to crawl.</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        <span class="comment">#prepare</span></span><br><span class="line">        base_url=<span class="string">'http://example.cn/'</span></span><br><span class="line">        cata_base_url=catalogue_url.split(<span class="string">'?'</span>)[<span class="number">0</span>]</span><br><span class="line">        para = &#123;</span><br><span class="line">            <span class="string">'pageIndex'</span>: <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">#get the number of pages</span></span><br><span class="line">        xpath=<span class="string">'//*[@id="page_num"]/text()'</span></span><br><span class="line">        page_num=int(self.uni_parser(cata_base_url,xpath,params=para,**kwargs))</span><br><span class="line">        </span><br><span class="line">        <span class="comment">#repeat get single catalogue's urls</span></span><br><span class="line">        xpath=<span class="string">'//a/@href'</span><span class="comment">#link tag's xpath</span></span><br><span class="line">        url_list=[]</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,page_num+<span class="number">1</span>):</span><br><span class="line">            para[<span class="string">'pageIndex'</span>] = i</span><br><span class="line">            <span class="comment">#get single catalogue's urls</span></span><br><span class="line">            urls=self.uni_parser(cata_base_url,xpath,params=para,**kwargs)</span><br><span class="line">            <span class="keyword">for</span> url <span class="keyword">in</span> urls:</span><br><span class="line">                url_list.append(base_url+str(url))</span><br><span class="line">            </span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> url_list</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_content</span><span class="params">(self,url,**kwargs)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        get content from the parameter "url"</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        html=requests.post(url,**kwargs).text</span><br><span class="line">        soup=BeautifulSoup(html,<span class="string">'lxml'</span>)</span><br><span class="line">        content=soup.find(<span class="string">'div'</span>,id=<span class="string">'content'</span>)</span><br><span class="line">        content=str(content)</span><br><span class="line">        <span class="keyword">return</span> content</span><br></pre></td></tr></table></figure>
+<p>我把构造登录信息的部分放在了解析器中。并在登录中调用。</p>
+<p>登录之后得到的cookies就在参数中传递。</p>
+<h2 id="数据库类"><a href="#数据库类" class="headerlink" title="数据库类"></a>数据库类</h2><p>由于只打算存到数据库，所以并没有写一个“存档宝石类“，或许之后会写。</p>
+<p>目前我只写了一个保存函数，以及自己封装的一个数据库类。</p>
+<p>这个数据库类是<code>my_database.py</code>中的<code>MyDatabase</code>（应该不会撞名吧），目前只封装了insert函数，传入的参数有三个：数据库名，表名，装有记录的字典。代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyDatabase</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,*args,**kwargs)</span>:</span></span><br><span class="line">        self.conn=pymysql.connect(*args,**kwargs)</span><br><span class="line">        self.cursor=self.conn.cursor()</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">insert</span><span class="params">(self,db,table,record_dict)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        :param db:name of database that you want to use</span></span><br><span class="line"><span class="string">        :param table:name of table that you want to use</span></span><br><span class="line"><span class="string">        :param record_dict:key for column,value for value</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        <span class="comment">#1.use the database</span></span><br><span class="line">        sql=<span class="string">'use &#123;&#125;'</span>.format(db)</span><br><span class="line">        self.cursor.execute(sql)</span><br><span class="line">        self.conn.commit()</span><br><span class="line">		</span><br><span class="line">        <span class="comment">#2.connect the sql commend</span></span><br><span class="line">        sql=<span class="string">'insert into &#123;&#125;('</span>.format(table)</span><br><span class="line">        </span><br><span class="line">        record_list=list(record_dict.items())</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> r <span class="keyword">in</span> record_list:</span><br><span class="line">            sql += str(r[<span class="number">0</span>])</span><br><span class="line">            <span class="keyword">if</span> r != record_list[<span class="number">-1</span>]:</span><br><span class="line">                sql += <span class="string">','</span></span><br><span class="line"></span><br><span class="line">        sql+=<span class="string">') values('</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> r <span class="keyword">in</span> record_list:</span><br><span class="line">            sql += <span class="string">'"'</span></span><br><span class="line">            sql += str(r[<span class="number">1</span>])</span><br><span class="line">            sql += <span class="string">'"'</span></span><br><span class="line">            <span class="keyword">if</span> r != record_list[<span class="number">-1</span>]:</span><br><span class="line">                sql += <span class="string">','</span></span><br><span class="line">        sql+=<span class="string">')'</span></span><br><span class="line">		</span><br><span class="line">        <span class="comment">#3.commit</span></span><br><span class="line">        self.cursor.execute(sql)</span><br><span class="line">        self.conn.commit()</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__del__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.cursor.close()</span><br><span class="line">        self.conn.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    db_data=&#123;</span><br><span class="line">        <span class="string">'host'</span>:<span class="string">'127.0.0.1'</span>,</span><br><span class="line">        <span class="string">'user'</span>:<span class="string">'root'</span>,</span><br><span class="line">        <span class="string">'passwd'</span>:<span class="string">'password'</span>,</span><br><span class="line">        <span class="string">'port'</span>:<span class="number">3306</span>,</span><br><span class="line">        <span class="string">'charset'</span>:<span class="string">'utf8'</span></span><br><span class="line">    &#125;</span><br><span class="line">    test_record=&#123;</span><br><span class="line">        <span class="string">'idnew_table'</span>:<span class="string">'233'</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    mydb=MyDatabase(**db_data)</span><br><span class="line">    mydb.insert(<span class="string">'news'</span>,<span class="string">'new_table'</span>,test_record)</span><br></pre></td></tr></table></figure>
+<p>封装之后用起来比较方便。</p>
+<h3 id="save函数"><a href="#save函数" class="headerlink" title="save函数"></a>save函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save</span><span class="params">(content,**save_params)</span>:</span></span><br><span class="line">    mydb=MyDatabase(**save_params)</span><br><span class="line">    record=&#123;</span><br><span class="line">        <span class="string">'content'</span>:pymysql.escape_string(content)</span><br><span class="line">    &#125;</span><br><span class="line">    mydb.insert(<span class="string">'dbase'</span>,<span class="string">'bulletin'</span>,record)</span><br></pre></td></tr></table></figure>
+<p>pymysql.escape_string()函数是用于将内容转义的，因为爬取的是html代码（就不解析那么细了，直接把那一块html代码全部存下来，打开的时候格式还不会乱），有些内容可能使组合成的sql语句无法执行。</p>
+<h2 id="爬虫类"><a href="#爬虫类" class="headerlink" title="爬虫类"></a>爬虫类</h2><p>给构造函数传入特定的解析器和保存函数，然后调用crawl方法就可以让spider背着特制的parser去爬取网站内容啦~</p>
+<p>登录函数和上次不太一样，做了一些修改，不过主要功能仍然是获取登录之后的cookies的。</p>
+<p>简单说一下修改：我们学校网站登录之后会从登陆页面开始，经过三四次跳转之后才到达首页，期间获取到的cookies都需要保留，这样才能利用这些cookies来进入新闻公告页面。于是禁止重定向，手动获取下一个url，得到这一站的cookies之后再手动跳转，直到跳转到首页。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MySpider</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,parser,save,**save_params)</span>:</span></span><br><span class="line">        self.parser=parser<span class="comment">#parser is a object of class</span></span><br><span class="line">        self.save=save<span class="comment">#save is a function</span></span><br><span class="line">        self.save_params=save_params</span><br><span class="line">        self.cookies=<span class="keyword">None</span></span><br><span class="line">        self.headers=&#123;</span><br><span class="line">            <span class="string">"User-Agent"</span>:<span class="string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36"</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">(self,login_url,home_page_url)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        login</span></span><br><span class="line"><span class="string">        :param login_url: the url you want to login</span></span><br><span class="line"><span class="string">        :param login_data_parser: a callback function to get the login_data you need when you login,return (login_data,response.cookies)</span></span><br><span class="line"><span class="string">        :param target_url: Used to determine if you have logged in successfully</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        :return: response of login</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line"></span><br><span class="line">        login_data=<span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#get the login data</span></span><br><span class="line">        login_data,cookies=self.parser.login_data_parser(login_url)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#login without redirecting</span></span><br><span class="line">        response=requests.post(login_url,headers=self.headers,data=login_data,cookies=cookies,allow_redirects=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line">        cookies_num=<span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span>(home_page_url!=<span class="keyword">None</span> <span class="keyword">and</span> response.url!=home_page_url):<span class="comment">#if spider is not reach the target page</span></span><br><span class="line">            print(<span class="string">'[spider]: I am at the "&#123;&#125;" now'</span>.format(response.url))</span><br><span class="line">            print(<span class="string">'[spider]: I have got a cookie!Its content is that \n"&#123;&#125;"'</span>.format(response.cookies))</span><br><span class="line">            <span class="comment">#merge the two cookies</span></span><br><span class="line">            cookies=dict(cookies,**response.cookies)</span><br><span class="line">            cookies=requests.utils.cookiejar_from_dict(cookies)</span><br><span class="line">            cookies_num+=<span class="number">1</span></span><br><span class="line">            print(<span class="string">'[spider]: Now I have &#123;&#125; cookies!'</span>.format(cookies_num))</span><br><span class="line">            next_station=response.headers[<span class="string">'Location'</span>]</span><br><span class="line">            print(<span class="string">'[spider]: Then I will go to the page whose url is "&#123;&#125;"'</span>.format(next_station))</span><br><span class="line">            response=requests.post(next_station,headers=self.headers,cookies=cookies,allow_redirects=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line">        cookies=dict(cookies,**response.cookies)</span><br><span class="line">        cookies=requests.utils.cookiejar_from_dict(cookies)</span><br><span class="line">        cookies_num+=<span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(home_page_url!=<span class="keyword">None</span> <span class="keyword">and</span> response.url==home_page_url):</span><br><span class="line">            print(<span class="string">"login successfully"</span>)</span><br><span class="line"></span><br><span class="line">        self.cookies=cookies</span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">crawl</span><span class="params">(self,login_url,home_page_url,catalogue_url)</span>:</span></span><br><span class="line">        self.login(login_url,home_page_url)</span><br><span class="line">        url_list=self.parser.get_urls(catalogue_url,cookies=self.cookies,headers=self.headers)</span><br><span class="line">        <span class="keyword">for</span> url <span class="keyword">in</span> url_list:</span><br><span class="line">            content=self.parser.get_content(url,cookies=self.cookies,headers=self.headers)</span><br><span class="line">            self.save(content,**self.save_params)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__del__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<h1 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h1><p>为了更好地展示结构，大部分内容都pass省略掉。想看具体代码可以去我github的<a href="https://github.com/HaneChiri/Spider" target="_blank" rel="noopener">spider库</a></p>
+<p>这个文件内首先创建了一个特定解析类，继承自通用解析类，再写了一个保存函数，准备好参数，最后爬取。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> my_spider <span class="keyword">import</span> MySpider</span><br><span class="line"><span class="keyword">from</span> my_parser <span class="keyword">import</span> MyParser</span><br><span class="line"><span class="keyword">from</span> my_database <span class="keyword">import</span> MyDatabase</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">chdParser</span><span class="params">(MyParser)</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">login_data_parser</span><span class="params">(self,login_url)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        This parser is for chd</span></span><br><span class="line"><span class="string">        :param url: the url you want to login</span></span><br><span class="line"><span class="string">        :return (a dict with login data,cookies)</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">return</span> login_data,response.cookies</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_urls</span><span class="params">(self,catalogue_url,**kwargs)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        get all urls that needs to crawl.</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        <span class="comment">#prepare</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">#get page number</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">#repeat get single catalogue's urls</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,page_num+<span class="number">1</span>):</span><br><span class="line">            para[<span class="string">'pageIndex'</span>] = i</span><br><span class="line">            <span class="comment">#get single catalogue's urls</span></span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">return</span> url_list</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save</span><span class="params">(content,**save_params)</span>:</span></span><br><span class="line">	<span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line"></span><br><span class="line">    login_url=<span class="string">"pass"</span><span class="comment">#省略</span></span><br><span class="line">    home_page_url=<span class="string">"pass"</span></span><br><span class="line">    catalogue_url=<span class="string">"pass"</span></span><br><span class="line"></span><br><span class="line">    parser=chdParser()</span><br><span class="line">    save_params=&#123;</span><br><span class="line">        <span class="string">'host'</span>:<span class="string">'127.0.0.1'</span>,</span><br><span class="line">        <span class="string">'user'</span>:<span class="string">'root'</span>,</span><br><span class="line">        <span class="string">'passwd'</span>:<span class="string">'password'</span>,</span><br><span class="line">        <span class="string">'port'</span>:<span class="number">3306</span>,</span><br><span class="line">        <span class="string">'charset'</span>:<span class="string">'utf8'</span></span><br><span class="line">    &#125;</span><br><span class="line">    sp=MySpider(parser,save,**save_params)</span><br><span class="line">    sp.crawl(login_url,home_page_url,catalogue_url)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/爬虫/" rel="tag"># 爬虫</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/python_spider_note4optimization_of_the_login_function/" rel="next" title="python爬虫学习笔记4模拟登录函数的优化">
+                <i class="fa fa-chevron-left"></i> python爬虫学习笔记4模拟登录函数的优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/java_game_FightFieldFrame/" rel="prev" title="java基于AWT的对战小游戏">
+                java基于AWT的对战小游戏 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="憧憬少">
+            
+              <p class="site-author-name" itemprop="name">憧憬少</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/HaneChiri" title="GitHub &rarr; https://github.com/HaneChiri" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://space.bilibili.com/13290087" title="Bilibili &rarr; https://space.bilibili.com/13290087" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>Bilibili</a>
+                </span>
+              
+            </div>
+          
+		  
+		  
+		  
+		  
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tianruishi.github.io" title="https://tianruishi.github.io" rel="noopener" target="_blank">空白</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://zzdoreen.github.io/dist/index" title="https://zzdoreen.github.io/dist/index" rel="noopener" target="_blank">曾智</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://lollipopnougat.github.io/Crepeblog/" title="https://lollipopnougat.github.io/Crepeblog/" rel="noopener" target="_blank">封掣</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.cnblogs.com/1625--H/" title="https://www.cnblogs.com/1625--H/" rel="noopener" target="_blank">暮冥</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jxyzxy.github.io/" title="https://jxyzxy.github.io/" rel="noopener" target="_blank">晓宇</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#初步思路"><span class="nav-text">初步思路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进一步设计"><span class="nav-text">进一步设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参考代码"><span class="nav-text">参考代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解析器类"><span class="nav-text">解析器类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库类"><span class="nav-text">数据库类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#save函数"><span class="nav-text">save函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#爬虫类"><span class="nav-text">爬虫类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#调用"><span class="nav-text">调用</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">憧憬少</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+  <div style="display: none;">
+    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1276110171'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s96.cnzz.com/z_stat.php%3Fid%3D1276110171%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'D6yAkWdfKpiymkjB7yLOBmtu-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'D6yAkWdfKpiymkjB7yLOBmtu-gzGzoHsz',
+                'X-LC-Key': 'voaLXamEykorKePTABBVxnmH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":100,"height":200},"mobile":{"show":false}});</script></body>
+</html>

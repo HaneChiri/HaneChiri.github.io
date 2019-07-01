@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false,"dimmer":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="在完成了基本的爬取任务之后，接到了将其封装为一个爬虫类的任务 传送门：  python爬虫学习笔记1一个简单的爬虫  python爬虫学习笔记2模拟登录与数据库">
+<meta name="keywords" content="python,爬虫">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python爬虫学习笔记3封装爬虫类">
+<meta property="og:url" content="https://hanechiri.github.io/post/python_spider_note3class_spider/index.html">
+<meta property="og:site_name" content="尘世未解">
+<meta property="og:description" content="在完成了基本的爬取任务之后，接到了将其封装为一个爬虫类的任务 传送门：  python爬虫学习笔记1一个简单的爬虫  python爬虫学习笔记2模拟登录与数据库">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-26T14:51:39.672Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python爬虫学习笔记3封装爬虫类">
+<meta name="twitter:description" content="在完成了基本的爬取任务之后，接到了将其封装为一个爬虫类的任务 传送门：  python爬虫学习笔记1一个简单的爬虫  python爬虫学习笔记2模拟登录与数据库">
+
+
+
+
+
+
+  <link rel="canonical" href="https://hanechiri.github.io/post/python_spider_note3class_spider/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>python爬虫学习笔记3封装爬虫类 | 尘世未解</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">尘世未解</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">过去不可追，未来尚可为</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-留言">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="https://github.com/HaneChiri/HaneChiri.github.io/issues" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>留言</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-解决方案">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/solution/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>解决方案</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hanechiri.github.io/post/python_spider_note3class_spider/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="憧憬少">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="尘世未解">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python爬虫学习笔记3封装爬虫类
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-15 19:00:56" itemprop="dateCreated datePublished" datetime="2019-03-15T19:00:56+08:00">2019-03-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-26 22:51:39" itemprop="dateModified" datetime="2019-06-26T22:51:39+08:00">2019-06-26</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/项目总结/" itemprop="url" rel="index"><span itemprop="name">项目总结</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/post/python_spider_note3class_spider/" class="leancloud_visitors" data-flag-title="python爬虫学习笔记3封装爬虫类">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在完成了基本的爬取任务之后，接到了将其封装为一个爬虫类的任务</p>
+<p>传送门：</p>
+<ul>
+<li><p><a href="https://hanechiri.github.io/post/python_spider_note1simple_spider/#more">python爬虫学习笔记1一个简单的爬虫</a></p>
+</li>
+<li><p><a href="https://hanechiri.github.io/post/python_spider_note2login_and_database/#more">python爬虫学习笔记2模拟登录与数据库</a></p>
+</li>
+</ul>
+<a id="more"></a>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>转载注明出处。</p>
+<h1 id="任务介绍"><a href="#任务介绍" class="headerlink" title="任务介绍"></a>任务介绍</h1><p>1、尝试不使用session去进行爬取，最好能将cookies保存下来可以供下次使用。<br>2、第二个是尝试将这些封装成面向对象的方式，模拟登陆，爬取，解析，写入数据库这几个部分分离开来。</p>
+<p>先做第二个任务</p>
+<h1 id="过程记录"><a href="#过程记录" class="headerlink" title="过程记录"></a>过程记录</h1><h2 id="190310-周日"><a href="#190310-周日" class="headerlink" title="190310 周日"></a>190310 周日</h2><h3 id="创建爬虫类"><a href="#创建爬虫类" class="headerlink" title="创建爬虫类"></a>创建爬虫类</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">spider</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    爬虫类</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.session=requests.session()<span class="comment">#初始化登录session</span></span><br><span class="line">        self.is_login=<span class="keyword">False</span><span class="comment">#登录状态</span></span><br></pre></td></tr></table></figure>
+<h3 id="获取登录所需信息"><a href="#获取登录所需信息" class="headerlink" title="获取登录所需信息"></a>获取登录所需信息</h3><p>获取登录信息（账号密码以及校验码）这部分与登录可以分开，单独写一个成员函数。</p>
+<p>在输入密码这个地方，本来查到可以使用<code>getpass</code>这个库里面的<code>getpass()</code>函数来使用类似linux的密码不回显，用法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> getpass</span><br><span class="line">passwd=getpass.getpass()</span><br><span class="line">print(passwd)<span class="comment">#测试用输出</span></span><br></pre></td></tr></table></figure>
+<p>但是直接在pycharm里面运行是会卡在输入那里，并且也会回显。后来查到了，这个方法是在命令行当中才管用，我试了一下在python命令行中使用，</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;<span class="keyword">import</span> getpass</span><br><span class="line">&gt;&gt;&gt;passwd=getpass.getpass()</span><br><span class="line">Warning: Password input may be echoed.</span><br><span class="line">Password: &gt;? 123</span><br><span class="line">&gt;&gt;&gt;print(passwd)</span><br><span class="line"><span class="number">123</span></span><br></pre></td></tr></table></figure>
+<p>虽然可以使用了，但是仍然会回显。所以这个命令行说的应该不是python命令行，而是cmd或者shell。</p>
+<p>在虚拟环境的cmd里面，成功了，Password后面未回显我的输入，下面的数字是测试用的输出，将密码打印出来。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(venv) F:\DEVELOP\py_develop\spider&gt;python test.py</span><br><span class="line">Password:</span><br><span class="line"><span class="number">123</span></span><br></pre></td></tr></table></figure>
+<p>不过为了方便调试代码，我还是使用了<code>input()</code>函数</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://www.cnblogs.com/AaronFan/p/6057224.html" target="_blank" rel="noopener">python3-password在输入密码时隐藏密码-博客园</a></li>
+<li><a href="https://www.cnblogs.com/Richardzhu/p/5162289.html" target="_blank" rel="noopener">Python之控制台输入密码的方法-博客园</a></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_login_data</span><span class="params">(self,login_url)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    获取登录需要的数据</span></span><br><span class="line"><span class="string">    :param login_url: 登录页面url</span></span><br><span class="line"><span class="string">    :return: 一个存有登录数据的字典</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    <span class="comment"># 获取登录校验码</span></span><br><span class="line">    html = self.session.post(login_url, headers=self.headers).text</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    lt = soup.find(<span class="string">'input'</span>, &#123;<span class="string">'name'</span>: <span class="string">'lt'</span>&#125;)[<span class="string">'value'</span>]</span><br><span class="line">    dllt = soup.find(<span class="string">'input'</span>, &#123;<span class="string">'name'</span>: <span class="string">'dllt'</span>&#125;)[<span class="string">'value'</span>]</span><br><span class="line">    execution = soup.find(<span class="string">'input'</span>, &#123;<span class="string">'name'</span>: <span class="string">'execution'</span>&#125;)[<span class="string">'value'</span>]</span><br><span class="line">    _eventId = soup.find(<span class="string">'input'</span>, &#123;<span class="string">'name'</span>: <span class="string">'_eventId'</span>&#125;)[<span class="string">'value'</span>]</span><br><span class="line">    rmShown = soup.find(<span class="string">'input'</span>, &#123;<span class="string">'name'</span>: <span class="string">'rmShown'</span>&#125;)[<span class="string">'value'</span>]</span><br><span class="line">    login_data = &#123;</span><br><span class="line">        <span class="string">'username'</span>: input(<span class="string">"请输入学号："</span>),</span><br><span class="line">        <span class="string">'password'</span>: input(<span class="string">"请输入密码："</span>),</span><br><span class="line">        <span class="string">'btn'</span>: <span class="string">''</span>,</span><br><span class="line">        <span class="string">'lt'</span>: lt,</span><br><span class="line">        <span class="string">'dllt'</span>: dllt,</span><br><span class="line">        <span class="string">'execution'</span>: execution,</span><br><span class="line">        <span class="string">'_eventId'</span>: _eventId,</span><br><span class="line">        <span class="string">'rmShown'</span>: rmShown</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> login_data</span><br></pre></td></tr></table></figure>
+<h3 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">(self,login_url)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">        登录并返回已经登录的会话</span></span><br><span class="line"><span class="string">        :return: 已经登录的会话（session）</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    login_data=self.get_login_data(login_url)<span class="comment">#获取登录信息</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 登录</span></span><br><span class="line">    response = self.session.post(login_url, headers=self.headers, data=login_data)</span><br><span class="line">    <span class="keyword">if</span> response.url!=login_url:<span class="comment">#如果没有跳转回登录页面，那么就是登录成功</span></span><br><span class="line">        print(<span class="string">"登录成功"</span>)</span><br><span class="line">        self.is_login=<span class="keyword">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">"登录失败"</span>)</span><br><span class="line">    <span class="keyword">return</span> self.session</span><br></pre></td></tr></table></figure>
+<h3 id="day8进度"><a href="#day8进度" class="headerlink" title="day8进度"></a>day8进度</h3><ol>
+<li>了解了一下Python类与对象的语法，尝试将代码封装到类中（一些中间代码未保留），不过想要将它改的有通用性（能够爬取其他网站）有些困难，还是先固定只能爬取信息门户</li>
+<li>接下来的计划：将类完成之后再慢慢优化，学习使用cookie代替session保持登录，以及数据库的更多知识</li>
+</ol>
+<h2 id="190311-周一"><a href="#190311-周一" class="headerlink" title="190311 周一"></a>190311 周一</h2><h3 id="day9进度"><a href="#day9进度" class="headerlink" title="day9进度"></a>day9进度</h3><ol>
+<li>图书馆借了一本mysql的书籍，在mysql命令行上练习创建数据库，表以及字段的操作</li>
+<li>在将代码封装成类的过程中，学习了如何将参数作为一个字典传入，以及将一个字典作为参数传入</li>
+</ol>
+<h2 id="190312-周二"><a href="#190312-周二" class="headerlink" title="190312 周二"></a>190312 周二</h2><h3 id="获取单页目录内的公告url"><a href="#获取单页目录内的公告url" class="headerlink" title="获取单页目录内的公告url"></a>获取单页目录内的公告url</h3><p>目录网页的内容：</p>
+<ul>
+<li>关于……的通知</li>
+<li>关于……获奖</li>
+<li>……</li>
+<li>2700条记录，分为138页显示，下一页</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_url_from_cata</span><span class="params">(self,url,params)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    返回当前页面的url组成的列表</span></span><br><span class="line"><span class="string">    :param url: 无参数的url#如：http://portal.xxx.edu.cn/detach.portal</span></span><br><span class="line"><span class="string">    :param params:url的？后参数#如：?pageIndex=1</span></span><br><span class="line"><span class="string">    :return:以页面指向的标题和url组成的元组为元素的列表，即[(title,content),(title,content)]的形式</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#获取url域名部分</span></span><br><span class="line">    <span class="comment">#如：http://portal.xxx.edu.cn</span></span><br><span class="line">    base=url.split(<span class="string">'/'</span>)</span><br><span class="line">    base=base[<span class="number">0</span>]+<span class="string">'//'</span>+base[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment">#获取当前页所有链接</span></span><br><span class="line">    html = self.session.post(url,params=params).text<span class="comment">#用params参数来拼接参数</span></span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    rss_title = soup.find_all(<span class="string">'a'</span>, class_=<span class="string">'rss-title'</span>)<span class="comment">#获取所有链接</span></span><br><span class="line"></span><br><span class="line">    result_list=[]</span><br><span class="line">    <span class="keyword">for</span> url <span class="keyword">in</span> rss_title:</span><br><span class="line">        title=url.get_text().strip()</span><br><span class="line">        page_url=base+<span class="string">'/'</span>+url[<span class="string">'href'</span>]<span class="comment">#将url拼接完整</span></span><br><span class="line">        l=(title,page_url)</span><br><span class="line">        result_list.append(l)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#print(result_list)</span></span><br><span class="line">    <span class="keyword">return</span> result_list</span><br></pre></td></tr></table></figure>
+<h3 id="获取所有目录内的公告url"><a href="#获取所有目录内的公告url" class="headerlink" title="获取所有目录内的公告url"></a>获取所有目录内的公告url</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_url_from_cata_all</span><span class="params">(self, url)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    获取页面的底部跳转到其他页的链接并获取目录，给出一个目录页的url，获取相关的所有目录页的url并获取链接</span></span><br><span class="line"><span class="string">    :param url: 其中任何一个目录页的url#如：http://portal.xxx.edu.cn/detach.portal?pageIndex=1</span></span><br><span class="line"><span class="string">    :return:以所有页面的标题和url组成的元组为元素的列表，即[(title,content),(title,content)]的形式</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#获取除去参数之后的url</span></span><br><span class="line">    <span class="comment">#如：http://portal.xxx.edu.cn/detach.portal</span></span><br><span class="line">    base=url.split(<span class="string">'?'</span>)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">    html = self.session.post(url).text</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    <span class="comment"># 获取页数</span></span><br><span class="line">    reg = <span class="string">'共.*?条记录 分(.*?)页显示'</span></span><br><span class="line">    reg = re.compile(reg, re.S)</span><br><span class="line">    num = int(re.findall(reg, html)[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">    <span class="comment">#获取url</span></span><br><span class="line">    para = &#123;</span><br><span class="line">        <span class="string">'pageIndex'</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="string">'pageSize'</span>: <span class="string">''</span>,</span><br><span class="line">        <span class="string">'.pmn'</span>: <span class="string">'view'</span>,</span><br><span class="line">        <span class="string">'.ia'</span>: <span class="string">'false'</span>,</span><br><span class="line">        <span class="string">'action'</span>: <span class="string">'bulletinsMoreView'</span>,</span><br><span class="line">        <span class="string">'search'</span>: <span class="string">'true'</span>,</span><br><span class="line">        <span class="string">'groupid'</span>: <span class="string">'all'</span>,</span><br><span class="line">        <span class="string">'.pen'</span>: <span class="string">'pe65'</span></span><br><span class="line">    &#125;</span><br><span class="line">    ret=[]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,num+<span class="number">1</span>):</span><br><span class="line">        ret.extend(self.get_url_from_cata(base,params=para))</span><br><span class="line">        para[<span class="string">'pageIndex'</span>] = i</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ret</span><br></pre></td></tr></table></figure>
+<h3 id="day10进度"><a href="#day10进度" class="headerlink" title="day10进度"></a>day10进度</h3><p>实现了自动获取目录页数，并从每一页目录获取所有的url，返回当前所有公告的url的列表</p>
+<h2 id="190313-周三"><a href="#190313-周三" class="headerlink" title="190313 周三"></a>190313 周三</h2><h3 id="获取正文"><a href="#获取正文" class="headerlink" title="获取正文"></a>获取正文</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_page</span><span class="params">(self,url)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    提取页面中的公告正文</span></span><br><span class="line"><span class="string">    :param url: 页面url</span></span><br><span class="line"><span class="string">    :return: 正文</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    html = self.session.post(url, headers=self.headers).text</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    bulletin_content = soup.find(<span class="string">'div'</span>, class_=<span class="string">'bulletin-content'</span>)</span><br><span class="line"></span><br><span class="line">    bulletin_content =bulletin_content.get_text()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> bulletin_content</span><br></pre></td></tr></table></figure>
+<h3 id="保存到txt"><a href="#保存到txt" class="headerlink" title="保存到txt"></a>保存到txt</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_by_txt</span><span class="params">(self,file_content,file_name)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    获取单个公告页面的公告并保存到txt</span></span><br><span class="line"><span class="string">    :param file_content:文件内容(str)</span></span><br><span class="line"><span class="string">    :param file_name:输出文件名(str)</span></span><br><span class="line"><span class="string">    :return:无</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    <span class="comment"># 转换为可以作为文件名字的形式</span></span><br><span class="line">    reg = <span class="string">r'[\/:*?"&lt;&gt;|]'</span></span><br><span class="line">    file_name = re.sub(reg, <span class="string">""</span>, file_name)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> open(file_name, <span class="string">'w'</span>, encoding=<span class="string">'utf8'</span>) <span class="keyword">as</span> fout:</span><br><span class="line">        fout.write(file_content)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'成功保存到&#123;&#125;'</span>.format(file_name))</span><br></pre></td></tr></table></figure>
+<h3 id="保存到db"><a href="#保存到db" class="headerlink" title="保存到db"></a>保存到db</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_by_db</span><span class="params">(self,content,title)</span>:</span></span><br><span class="line">    <span class="comment">#未改造完成</span></span><br><span class="line">    db = pymysql.connect(host=<span class="string">'127.0.0.1'</span>, port=<span class="number">3306</span>, user=<span class="string">'root'</span>, passwd=<span class="string">'root'</span>, db=<span class="string">'news'</span>, charset=<span class="string">'utf8'</span>)</span><br><span class="line">    cursor = db.cursor()</span><br><span class="line">    cursor.execute(<span class="string">"insert into spider(`title`,`content`) values('&#123;0&#125;','&#123;1&#125;')"</span>.format(title, content))</span><br><span class="line">    db.commit()</span><br><span class="line">    print(<span class="string">'已经成功保存公告到数据库：“&#123;&#125;”'</span>.format(title))</span><br></pre></td></tr></table></figure>
+<h3 id="day11进度"><a href="#day11进度" class="headerlink" title="day11进度"></a>day11进度</h3><p>尝试将保存到数据库的函数里面的数据库参数放到函数形参处，怎么弄都觉得不太合适，于是还是将原本的代码放入</p>
+<h2 id="190314-周四"><a href="#190314-周四" class="headerlink" title="190314 周四"></a>190314 周四</h2><h3 id="cookie保持登录"><a href="#cookie保持登录" class="headerlink" title="cookie保持登录"></a>cookie保持登录</h3><p>参考链接：</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/42950252" target="_blank" rel="noopener">Python——Cookie保存到本地-知乎</a>（解决了问题的主要链接）</li>
+<li><a href="https://blog.csdn.net/qq_33472765/article/details/80738923" target="_blank" rel="noopener">爬虫保存cookies时重要的两个参数（ignore_discard和ignore_expires）的作用</a></li>
+</ul>
+<p>首先是库</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> http.cookiejar</span><br></pre></td></tr></table></figure>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,headers)</span>:</span></span><br><span class="line">    self.session=requests.session()<span class="comment">#初始化登录session</span></span><br><span class="line">    self.is_login=<span class="keyword">False</span><span class="comment">#登录状态</span></span><br><span class="line">    self.headers=headers<span class="comment">#头信息</span></span><br><span class="line">    self.cookiejar=http.cookiejar.LWPCookieJar(<span class="string">'cookie.txt'</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="保存cookie的函数"><a href="#保存cookie的函数" class="headerlink" title="保存cookie的函数"></a>保存cookie的函数</h4><p>大概是将已登录的session对象的cookies转换为字典（用了一个类似列表生成式的东西，查了一下，是字典生成式，python还真是方便，这么多简写方式），然后保存到cookiejar对象中，调用<code>save()</code>函数来将cookie内容保存到第一个参数指定的文件中，即使cookie已经被抛弃和过期。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_cookie</span><span class="params">(self)</span>:</span></span><br><span class="line">    requests.utils.cookiejar_from_dict(&#123;c.name: c.value <span class="keyword">for</span> c <span class="keyword">in</span> self.session.cookies&#125;, self.cookiejar)</span><br><span class="line">    <span class="comment"># 保存到本地文件</span></span><br><span class="line">    self.cookiejar.save(<span class="string">'cookies'</span>, ignore_discard=<span class="keyword">True</span>, ignore_expires=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="加载cookie的函数"><a href="#加载cookie的函数" class="headerlink" title="加载cookie的函数"></a>加载cookie的函数</h4><p>首先初始化一个LWPCookieJar对象</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">load_cookiejar = http.cookiejar.LWPCookieJar()</span><br></pre></td></tr></table></figure>
+<p>接着从文件中加载cookie</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">load_cookiejar.load(<span class="string">'cookies'</span>, ignore_discard=<span class="keyword">True</span>, ignore_expires=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<p>这里有个问题，这里如果加载失败了（没有这个文件，之前没有保存），需要知道已经失败了。所以使用一个try语句块测试一下。</p>
+<p>然后把这个LWPCookieJar对象给转换成字典，再转换赋值给session.cookie，这样就加载成功了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_cookie</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    加载cookie</span></span><br><span class="line"><span class="string">    :return: 是否成功</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    load_cookiejar = http.cookiejar.LWPCookieJar()</span><br><span class="line">    <span class="comment"># 从文件中加载cookies(LWP格式)</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        load_cookiejar.load(<span class="string">'cookies'</span>, ignore_discard=<span class="keyword">True</span>, ignore_expires=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 转换成字典</span></span><br><span class="line">    load_cookies = requests.utils.dict_from_cookiejar(load_cookiejar)</span><br><span class="line">    <span class="comment"># 将字典转换成RequestsCookieJar，赋值给session的cookies.</span></span><br><span class="line">    self.session.cookies = requests.utils.cookiejar_from_dict(load_cookies)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h4 id="修改后的login"><a href="#修改后的login" class="headerlink" title="修改后的login()"></a>修改后的login()</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">(self,login_url)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">        登录并返回已经登录的会话</span></span><br><span class="line"><span class="string">        :return: 已经登录的会话（session）</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">if</span> self.load_cookie():</span><br><span class="line">        self.is_login = <span class="keyword">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment">#获取登录信息</span></span><br><span class="line">        login_data=self.get_login_data(login_url)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 登录</span></span><br><span class="line">        response = self.session.post(login_url, headers=self.headers, data=login_data)</span><br><span class="line">        <span class="keyword">if</span> response.url!=login_url:</span><br><span class="line">            print(<span class="string">"登录成功"</span>)</span><br><span class="line">            self.is_login=<span class="keyword">True</span></span><br><span class="line">            self.save_cookie()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">"登录失败"</span>)</span><br><span class="line">    <span class="keyword">return</span> self.session</span><br></pre></td></tr></table></figure>
+<h3 id="day12进度"><a href="#day12进度" class="headerlink" title="day12进度"></a>day12进度</h3><ol>
+<li>完成了爬虫类的封装</li>
+<li>使用http.cookiejar库实现了登录一次，在cookie有效期内不必再次登录的功能</li>
+</ol>
+<h1 id="代码总览"><a href="#代码总览" class="headerlink" title="代码总览"></a>代码总览</h1><h2 id="import"><a href="#import" class="headerlink" title="import"></a>import</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> http.cookiejar</span><br></pre></td></tr></table></figure>
+<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">spider</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    爬虫类</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,headers)</span>:</span></span><br><span class="line">        self.session=requests.session()<span class="comment">#初始化登录session</span></span><br><span class="line">        self.is_login=<span class="keyword">False</span><span class="comment">#登录状态</span></span><br><span class="line">        self.headers=headers<span class="comment">#头信息</span></span><br><span class="line">        self.cookiejar=http.cookiejar.LWPCookieJar(<span class="string">'cookie.txt'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="获取登录信息"><a href="#获取登录信息" class="headerlink" title="获取登录信息"></a>获取登录信息</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_login_data</span><span class="params">(self,login_url)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    获取登录需要的数据</span></span><br><span class="line"><span class="string">    :param login_url: 登录页面url</span></span><br><span class="line"><span class="string">    :return: 一个存有登录数据的字典</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    <span class="comment"># 获取登录校验码</span></span><br><span class="line">    html = self.session.post(login_url, headers=self.headers).text</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    lt = soup.find(<span class="string">'input'</span>, &#123;<span class="string">'name'</span>: <span class="string">'lt'</span>&#125;)[<span class="string">'value'</span>]</span><br><span class="line">    dllt = soup.find(<span class="string">'input'</span>, &#123;<span class="string">'name'</span>: <span class="string">'dllt'</span>&#125;)[<span class="string">'value'</span>]</span><br><span class="line">    execution = soup.find(<span class="string">'input'</span>, &#123;<span class="string">'name'</span>: <span class="string">'execution'</span>&#125;)[<span class="string">'value'</span>]</span><br><span class="line">    _eventId = soup.find(<span class="string">'input'</span>, &#123;<span class="string">'name'</span>: <span class="string">'_eventId'</span>&#125;)[<span class="string">'value'</span>]</span><br><span class="line">    rmShown = soup.find(<span class="string">'input'</span>, &#123;<span class="string">'name'</span>: <span class="string">'rmShown'</span>&#125;)[<span class="string">'value'</span>]</span><br><span class="line">    login_data = &#123;</span><br><span class="line">        <span class="string">'username'</span>: input(<span class="string">"请输入学号："</span>),</span><br><span class="line">        <span class="string">'password'</span>: input(<span class="string">"请输入密码："</span>),</span><br><span class="line">        <span class="string">'btn'</span>: <span class="string">''</span>,</span><br><span class="line">        <span class="string">'lt'</span>: lt,</span><br><span class="line">        <span class="string">'dllt'</span>: dllt,</span><br><span class="line">        <span class="string">'execution'</span>: execution,</span><br><span class="line">        <span class="string">'_eventId'</span>: _eventId,</span><br><span class="line">        <span class="string">'rmShown'</span>: rmShown</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> login_data</span><br></pre></td></tr></table></figure>
+<h2 id="登录-1"><a href="#登录-1" class="headerlink" title="登录"></a>登录</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">(self,login_url)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">        登录并返回已经登录的会话</span></span><br><span class="line"><span class="string">        :return: 已经登录的会话（session）</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">if</span> self.load_cookie():</span><br><span class="line">        self.is_login = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">        <span class="comment">#获取登录信息</span></span><br><span class="line">        login_data=self.get_login_data(login_url)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 登录</span></span><br><span class="line">        response = self.session.post(login_url, headers=self.headers, data=login_data)</span><br><span class="line">        <span class="keyword">if</span> response.url!=login_url:</span><br><span class="line">            print(<span class="string">"登录成功"</span>)</span><br><span class="line">            self.is_login=<span class="keyword">True</span></span><br><span class="line">            self.save_cookie()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">"登录失败"</span>)</span><br><span class="line">    <span class="keyword">return</span> self.session</span><br></pre></td></tr></table></figure>
+<h2 id="获取单页目录"><a href="#获取单页目录" class="headerlink" title="获取单页目录"></a>获取单页目录</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_url_from_cata</span><span class="params">(self,url,params)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    返回当前页面的url组成的列表</span></span><br><span class="line"><span class="string">    :param url: 无参数的url</span></span><br><span class="line"><span class="string">    :param params:url的？后参数</span></span><br><span class="line"><span class="string">    :return:以页面指向的标题和url组成的元组为元素的列表，即[(title,content),(title,content)]的形式</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#获取url域名部分</span></span><br><span class="line">    base=url.split(<span class="string">'/'</span>)</span><br><span class="line">    base=base[<span class="number">0</span>]+<span class="string">'//'</span>+base[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment">#获取当前页所有链接</span></span><br><span class="line">    html = self.session.post(url,params=params).text<span class="comment">#用params参数来拼接参数</span></span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    rss_title = soup.find_all(<span class="string">'a'</span>, class_=<span class="string">'rss-title'</span>)<span class="comment">#获取所有链接</span></span><br><span class="line"></span><br><span class="line">    result_list=[]</span><br><span class="line">    <span class="keyword">for</span> url <span class="keyword">in</span> rss_title:</span><br><span class="line">        title=url.get_text().strip()</span><br><span class="line">        page_url=base+<span class="string">'/'</span>+url[<span class="string">'href'</span>]<span class="comment">#将url拼接完整</span></span><br><span class="line">        l=(title,page_url)</span><br><span class="line">        result_list.append(l)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#print(result_list)</span></span><br><span class="line">    <span class="keyword">return</span> result_list</span><br></pre></td></tr></table></figure>
+<h2 id="获取全部目录"><a href="#获取全部目录" class="headerlink" title="获取全部目录"></a>获取全部目录</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_url_from_cata_all</span><span class="params">(self, url)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    获取页面的底部跳转到其他页的链接并获取目录，给出一个目录页的url，获取相关的所有目录页的url并获取链接</span></span><br><span class="line"><span class="string">    :param url: 其中任何一个目录页的url</span></span><br><span class="line"><span class="string">    :return:以所有页面的标题和url组成的元组为元素的列表，即[(title,content),(title,content)]的形式</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#获取除去参数之后的url</span></span><br><span class="line">    base=url.split(<span class="string">'?'</span>)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">    html = self.session.post(url).text</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    <span class="comment"># 获取页数</span></span><br><span class="line">    reg = <span class="string">'共.*?条记录 分(.*?)页显示'</span></span><br><span class="line">    num = int(re.findall(reg, html)[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">    <span class="comment">#获取url</span></span><br><span class="line">    para = &#123;</span><br><span class="line">        <span class="string">'pageIndex'</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="string">'pageSize'</span>: <span class="string">''</span>,</span><br><span class="line">        <span class="string">'.pmn'</span>: <span class="string">'view'</span>,</span><br><span class="line">        <span class="string">'.ia'</span>: <span class="string">'false'</span>,</span><br><span class="line">        <span class="string">'action'</span>: <span class="string">'bulletinsMoreView'</span>,</span><br><span class="line">        <span class="string">'search'</span>: <span class="string">'true'</span>,</span><br><span class="line">        <span class="string">'groupid'</span>: <span class="string">'all'</span>,</span><br><span class="line">        <span class="string">'.pen'</span>: <span class="string">'pe65'</span></span><br><span class="line">    &#125;</span><br><span class="line">    ret=[]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,num+<span class="number">1</span>):</span><br><span class="line">        ret.extend(self.get_url_from_cata(base,params=para))</span><br><span class="line">        para[<span class="string">'pageIndex'</span>] = i</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ret</span><br></pre></td></tr></table></figure>
+<h2 id="获取正文-1"><a href="#获取正文-1" class="headerlink" title="获取正文"></a>获取正文</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_page</span><span class="params">(self,url)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    提取页面中的公告正文</span></span><br><span class="line"><span class="string">    :param url: 页面url</span></span><br><span class="line"><span class="string">    :return: 正文</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    html = self.session.post(url, headers=self.headers).text</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    bulletin_content = soup.find(<span class="string">'div'</span>, class_=<span class="string">'bulletin-content'</span>)</span><br><span class="line"></span><br><span class="line">    bulletin_content =bulletin_content.get_text()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> bulletin_content</span><br></pre></td></tr></table></figure>
+<h2 id="保存到txt-1"><a href="#保存到txt-1" class="headerlink" title="保存到txt"></a>保存到txt</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_by_txt</span><span class="params">(self,file_content,file_name)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    获取单个公告页面的公告并保存到txt</span></span><br><span class="line"><span class="string">    :param file_content:文件内容(str)</span></span><br><span class="line"><span class="string">    :param file_name:输出文件名(str)</span></span><br><span class="line"><span class="string">    :return:无</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    <span class="comment"># 转换为可以作为文件名字的形式</span></span><br><span class="line">    reg = <span class="string">r'[\/:*?"&lt;&gt;|]'</span></span><br><span class="line">    file_name = re.sub(reg, <span class="string">""</span>, file_name)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> open(file_name, <span class="string">'w'</span>, encoding=<span class="string">'utf8'</span>) <span class="keyword">as</span> fout:</span><br><span class="line">        fout.write(file_content)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'成功保存到&#123;&#125;'</span>.format(file_name))</span><br></pre></td></tr></table></figure>
+<h2 id="保存到数据库"><a href="#保存到数据库" class="headerlink" title="保存到数据库"></a>保存到数据库</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_by_db</span><span class="params">(self,content,title)</span>:</span></span><br><span class="line">    db = pymysql.connect(host=<span class="string">'127.0.0.1'</span>, port=<span class="number">3306</span>, user=<span class="string">'root'</span>, passwd=<span class="string">'root'</span>, db=<span class="string">'news'</span>, charset=<span class="string">'utf8'</span>)</span><br><span class="line">    cursor = db.cursor()</span><br><span class="line">    cursor.execute(<span class="string">"insert into spider(`title`,`content`) values('&#123;0&#125;','&#123;1&#125;')"</span>.format(title, content))</span><br><span class="line">    db.commit()</span><br><span class="line">    print(<span class="string">'已经成功保存公告到数据库：“&#123;&#125;”'</span>.format(title))</span><br></pre></td></tr></table></figure>
+<h2 id="保存cookie"><a href="#保存cookie" class="headerlink" title="保存cookie"></a>保存cookie</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_cookie</span><span class="params">(self)</span>:</span></span><br><span class="line">    requests.utils.cookiejar_from_dict(&#123;c.name: c.value <span class="keyword">for</span> c <span class="keyword">in</span> self.session.cookies&#125;, self.cookiejar)</span><br><span class="line">    <span class="comment"># 保存到本地文件</span></span><br><span class="line">    self.cookiejar.save(<span class="string">'cookies'</span>, ignore_discard=<span class="keyword">True</span>, ignore_expires=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="加载cookie"><a href="#加载cookie" class="headerlink" title="加载cookie"></a>加载cookie</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_cookie</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    加载cookie</span></span><br><span class="line"><span class="string">    :return: 是否成功</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    load_cookiejar = http.cookiejar.LWPCookieJar()</span><br><span class="line">    <span class="comment"># 从文件中加载cookies(LWP格式)</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        load_cookiejar.load(<span class="string">'cookies'</span>, ignore_discard=<span class="keyword">True</span>, ignore_expires=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        print(<span class="string">'cookie加载失败'</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 转换成字典</span></span><br><span class="line">    load_cookies = requests.utils.dict_from_cookiejar(load_cookiejar)</span><br><span class="line">    <span class="comment"># 将字典转换成RequestsCookieJar，赋值给session的cookies.</span></span><br><span class="line">    self.session.cookies = requests.utils.cookiejar_from_dict(load_cookies)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="爬取"><a href="#爬取" class="headerlink" title="爬取"></a>爬取</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">crawl</span><span class="params">(self,login_url,cata_url)</span>:</span></span><br><span class="line">    self.login(login_url)<span class="comment">#登陆</span></span><br><span class="line">    item_list=self.get_url_from_cata_all(cata_url)<span class="comment">#获取所有标题以及对应链接</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> item_list:</span><br><span class="line">        title,url=i<span class="comment">#解包</span></span><br><span class="line">        text=self.get_page(url)<span class="comment">#获取内容</span></span><br><span class="line">        self.save_by_txt(text,title+<span class="string">'.txt'</span>)<span class="comment">#保存</span></span><br><span class="line">        <span class="comment">#self.save_by_db(text,title)</span></span><br></pre></td></tr></table></figure>
+<h2 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">headers=&#123;</span><br><span class="line">    <span class="string">'User-Agent'</span>:<span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36'</span>,</span><br><span class="line">&#125;</span><br><span class="line">login_url=<span class="string">'http://xxx.xxx.xxx.cn/authserver/login?service=http%3A%2F%2Fportal.chd.edu.cn%2F'</span></span><br><span class="line">cata_url=<span class="string">'http://xxxxxx.xxx.xxx.cn/detach.portal?pageIndex=1&amp;pageSize=&amp;.pmn=view&amp;.ia=false&amp;action=bulletinsMoreView&amp;search=true&amp;groupid=all&amp;.pen=pe65'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#调用</span></span><br><span class="line">spiderman=spider(headers)</span><br><span class="line">spiderman.crawl(login_url, cata_url)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/爬虫/" rel="tag"># 爬虫</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/python_spider_note2login_and_database/" rel="next" title="python爬虫学习笔记2模拟登录与数据库">
+                <i class="fa fa-chevron-left"></i> python爬虫学习笔记2模拟登录与数据库
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/rats_and_poison/" rel="prev" title="老鼠和毒药问题">
+                老鼠和毒药问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="憧憬少">
+            
+              <p class="site-author-name" itemprop="name">憧憬少</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/HaneChiri" title="GitHub &rarr; https://github.com/HaneChiri" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://space.bilibili.com/13290087" title="Bilibili &rarr; https://space.bilibili.com/13290087" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>Bilibili</a>
+                </span>
+              
+            </div>
+          
+		  
+		  
+		  
+		  
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tianruishi.github.io" title="https://tianruishi.github.io" rel="noopener" target="_blank">空白</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://zzdoreen.github.io/dist/index" title="https://zzdoreen.github.io/dist/index" rel="noopener" target="_blank">曾智</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://lollipopnougat.github.io/Crepeblog/" title="https://lollipopnougat.github.io/Crepeblog/" rel="noopener" target="_blank">封掣</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.cnblogs.com/1625--H/" title="https://www.cnblogs.com/1625--H/" rel="noopener" target="_blank">暮冥</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jxyzxy.github.io/" title="https://jxyzxy.github.io/" rel="noopener" target="_blank">晓宇</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#任务介绍"><span class="nav-text">任务介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#过程记录"><span class="nav-text">过程记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#190310-周日"><span class="nav-text">190310 周日</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建爬虫类"><span class="nav-text">创建爬虫类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取登录所需信息"><span class="nav-text">获取登录所需信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#登录"><span class="nav-text">登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#day8进度"><span class="nav-text">day8进度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#190311-周一"><span class="nav-text">190311 周一</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#day9进度"><span class="nav-text">day9进度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#190312-周二"><span class="nav-text">190312 周二</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取单页目录内的公告url"><span class="nav-text">获取单页目录内的公告url</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取所有目录内的公告url"><span class="nav-text">获取所有目录内的公告url</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#day10进度"><span class="nav-text">day10进度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#190313-周三"><span class="nav-text">190313 周三</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取正文"><span class="nav-text">获取正文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保存到txt"><span class="nav-text">保存到txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保存到db"><span class="nav-text">保存到db</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#day11进度"><span class="nav-text">day11进度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#190314-周四"><span class="nav-text">190314 周四</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cookie保持登录"><span class="nav-text">cookie保持登录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化"><span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#保存cookie的函数"><span class="nav-text">保存cookie的函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#加载cookie的函数"><span class="nav-text">加载cookie的函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改后的login"><span class="nav-text">修改后的login()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#day12进度"><span class="nav-text">day12进度</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码总览"><span class="nav-text">代码总览</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#import"><span class="nav-text">import</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数"><span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取登录信息"><span class="nav-text">获取登录信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#登录-1"><span class="nav-text">登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取单页目录"><span class="nav-text">获取单页目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取全部目录"><span class="nav-text">获取全部目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取正文-1"><span class="nav-text">获取正文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#保存到txt-1"><span class="nav-text">保存到txt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#保存到数据库"><span class="nav-text">保存到数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#保存cookie"><span class="nav-text">保存cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加载cookie"><span class="nav-text">加载cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#爬取"><span class="nav-text">爬取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用"><span class="nav-text">调用</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">憧憬少</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+  <div style="display: none;">
+    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1276110171'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s96.cnzz.com/z_stat.php%3Fid%3D1276110171%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'D6yAkWdfKpiymkjB7yLOBmtu-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'D6yAkWdfKpiymkjB7yLOBmtu-gzGzoHsz',
+                'X-LC-Key': 'voaLXamEykorKePTABBVxnmH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":100,"height":200},"mobile":{"show":false}});</script></body>
+</html>

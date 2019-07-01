@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false,"dimmer":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="智能信息检索这门课程有个上机作业，题目是“实现倒排索引”。 用到了以前没有学的STL中的vector。 经过两次课上写代码（3小时）加上课后修bug的时间（晚上十点到十二点）总共5个小时，终于完成了一个简易的倒排索引。因为十点时已经太困，喝了柠檬茶提神结果现在睡不着，所以继续熬夜把博客写完吧。">
+<meta name="keywords" content="c++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简易倒排索引">
+<meta property="og:url" content="https://hanechiri.github.io/post/simple_inverted_index/index.html">
+<meta property="og:site_name" content="尘世未解">
+<meta property="og:description" content="智能信息检索这门课程有个上机作业，题目是“实现倒排索引”。 用到了以前没有学的STL中的vector。 经过两次课上写代码（3小时）加上课后修bug的时间（晚上十点到十二点）总共5个小时，终于完成了一个简易的倒排索引。因为十点时已经太困，喝了柠檬茶提神结果现在睡不着，所以继续熬夜把博客写完吧。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/simple_inverted_index.png">
+<meta property="og:updated_time" content="2019-06-28T03:22:23.653Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="简易倒排索引">
+<meta name="twitter:description" content="智能信息检索这门课程有个上机作业，题目是“实现倒排索引”。 用到了以前没有学的STL中的vector。 经过两次课上写代码（3小时）加上课后修bug的时间（晚上十点到十二点）总共5个小时，终于完成了一个简易的倒排索引。因为十点时已经太困，喝了柠檬茶提神结果现在睡不着，所以继续熬夜把博客写完吧。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/simple_inverted_index.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://hanechiri.github.io/post/simple_inverted_index/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>简易倒排索引 | 尘世未解</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">尘世未解</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">过去不可追，未来尚可为</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-留言">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="https://github.com/HaneChiri/HaneChiri.github.io/issues" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>留言</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-解决方案">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/solution/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>解决方案</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hanechiri.github.io/post/simple_inverted_index/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="憧憬少">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="尘世未解">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">简易倒排索引
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-30 00:11:12" itemprop="dateCreated datePublished" datetime="2019-03-30T00:11:12+08:00">2019-03-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-28 11:22:23" itemprop="dateModified" datetime="2019-06-28T11:22:23+08:00">2019-06-28</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/项目总结/" itemprop="url" rel="index"><span itemprop="name">项目总结</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/post/simple_inverted_index/" class="leancloud_visitors" data-flag-title="简易倒排索引">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>智能信息检索这门课程有个上机作业，题目是“实现倒排索引”。</p>
+<p>用到了以前没有学的STL中的vector。</p>
+<p>经过两次课上写代码（3小时）加上课后修bug的时间（晚上十点到十二点）总共5个小时，终于完成了一个简易的倒排索引。因为十点时已经太困，喝了柠檬茶提神结果现在睡不着，所以继续熬夜把博客写完吧。</p>
+<a id="more"></a>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>勿抄袭代码，代码仅供参考。转载注明出处</p>
+<h1 id="倒排索引简介"><a href="#倒排索引简介" class="headerlink" title="倒排索引简介"></a>倒排索引简介</h1><p>为了从文档集（collection）中检索出想要的结果，首先要将文档集中的每个词项（term）建立索引，以确定词项所在的文档（document）的id，从而返回根据关键字查询的结果。</p>
+<p>倒排索引的格式大概是下图这样（代码成果图）：</p>
+<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/simple_inverted_index.png" alt=""></p>
+<p>每一个词项后面跟着它在文档集中出现的次数，以及出现过的文档的id所组成的一个序列。</p>
+<p>例如第一条：</p>
+<table>
+<thead>
+<tr>
+<th>词项</th>
+<th>词频</th>
+<th>倒排记录表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API</td>
+<td>6</td>
+<td>4，5，6</td>
+</tr>
+</tbody>
+</table>
+<p>就代表<code>API</code>这个词在文档集（六个文件）中出现了六次，这六次分布在文档4、文档5和文档6。</p>
+<p>搜索引擎大致就是这个原理，建立好了索引之后，只需要把你搜索的关键词对应的posting求交集然后把对应的文档显示出来就可以了。</p>
+<h1 id="数据结构设计"><a href="#数据结构设计" class="headerlink" title="数据结构设计"></a>数据结构设计</h1><h2 id="文档（Document）"><a href="#文档（Document）" class="headerlink" title="文档（Document）"></a>文档（Document）</h2><p>文档其实在这里就是文件，对于每个文档，都有一个文档名，以及相对应的文档ID，它们得绑定好，否则会混乱。因此将它们放在一个结构体里面。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Document</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="built_in">string</span> docName;<span class="comment">//文档名</span></span><br><span class="line">	<span class="keyword">int</span> docID;<span class="comment">//文档id</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="索引项（IndexItem）"><a href="#索引项（IndexItem）" class="headerlink" title="索引项（IndexItem）"></a>索引项（IndexItem）</h2><p>同样的，每一个记录的词项、词频和记录表也是绑定的，所以也打包起来。文档id的数目不定，又不想自己写链表或者动态数组怕出错，因此采用了STL（标准模板库）里面的动态数组vector（向量容器）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">IndexItem</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="built_in">string</span> term;<span class="comment">//词项</span></span><br><span class="line">	<span class="keyword">int</span> frequence;<span class="comment">//词频</span></span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; posting;<span class="comment">//记录表</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="索引类（CIndex）"><a href="#索引类（CIndex）" class="headerlink" title="索引类（CIndex）"></a>索引类（CIndex）</h2><p>代码应该不难看懂。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CIndex</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="built_in">vector</span>&lt;IndexItem&gt; indexList;<span class="comment">//索引表</span></span><br><span class="line">	<span class="built_in">vector</span>&lt;Document&gt; collection;<span class="comment">//文档集</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	CIndex();</span><br><span class="line">	<span class="comment">//利用文件名数组初始化文档集</span></span><br><span class="line">	CIndex(<span class="built_in">string</span> p_collection[], <span class="keyword">int</span> n);</span><br><span class="line">	<span class="comment">//显示文档集内所有文档的文件名</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">showCollection</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="comment">//显示当前倒排索引表</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">showIndexList</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="comment">//索引单篇文档</span></span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">indexDocument</span><span class="params">(FILE*fp, <span class="keyword">int</span> docID)</span></span>;</span><br><span class="line">	<span class="comment">//索引文档集</span></span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">indexCollection</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="comment">//排序索引表</span></span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">sortIndex</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="comment">//索引表合并同类项</span></span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">mergeIndex</span><span class="params">()</span></span>;</span><br><span class="line">	~CIndex();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="大致思路"><a href="#大致思路" class="headerlink" title="大致思路"></a>大致思路</h1><ol>
+<li>扫描一篇文档，将这篇文档对应的文档ID加入对应词项的posting</li>
+<li>对文档集中每一篇文档重复第一步，获取所有词项及其对应的posting加入索引表，此时每个词项的posting中只有一个文档ID，并且有很多重复的词项记录；</li>
+<li>排序索引表；</li>
+<li>将重复的项的posting合并，并且增加词频，删除重复项。</li>
+</ol>
+<p>2019-4-4补充：想到一个新思路——直接按照ID从小到大扫描一遍整个文档集，每扫描一个词项，就在词典中查找这个词项，增加词频，然后把现在正在处理的文档的ID加入到posting，最后再排个序即可。</p>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><h2 id="有参构造函数"><a href="#有参构造函数" class="headerlink" title="有参构造函数"></a>有参构造函数</h2><p>初始化文档集</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//@name &lt;CIndex::CIndex&gt;</span></span><br><span class="line"><span class="comment">//@brief &lt;初始化文档集&gt;</span></span><br><span class="line"><span class="comment">//@param &lt;string p_collection[]:文档文件名数组&gt;&lt;int n:数组长度&gt;</span></span><br><span class="line">CIndex::CIndex(<span class="built_in">string</span> p_collection[], <span class="keyword">int</span> n)</span><br><span class="line">&#123;</span><br><span class="line">	Document nextDoc;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		nextDoc.docName = p_collection[i];</span><br><span class="line">		nextDoc.docID = i+<span class="number">1</span>;<span class="comment">//编号从1开始</span></span><br><span class="line">		collection.push_back(nextDoc);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="索引单篇文档"><a href="#索引单篇文档" class="headerlink" title="索引单篇文档"></a>索引单篇文档</h2><p>大致思路是，一个个字符读取进来，如果是字母就一直读完整个单词，并把这个单词作为词项加入表中。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//@name &lt;CIndex::indexDocument&gt;</span></span><br><span class="line"><span class="comment">//@brief &lt;索引单篇文档&gt;</span></span><br><span class="line"><span class="comment">//@param &lt;FILE * fp:已打开的文件指针&gt;&lt;int docID:此文件的编号&gt;</span></span><br><span class="line"><span class="comment">//@return &lt;扫描到的词项数量&gt;</span></span><br><span class="line"><span class="keyword">int</span> CIndex::indexDocument(FILE * fp, <span class="keyword">int</span> docID)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">char</span> ch;<span class="comment">//扫描用的变量</span></span><br><span class="line">	IndexItem indexItem;<span class="comment">//打包用的变量</span></span><br><span class="line">	<span class="keyword">int</span> num = <span class="number">0</span>;<span class="comment">//扫描到的词项数量</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span> (!feof(fp))</span><br><span class="line">	&#123;<span class="comment">//一次循环获取一个单词</span></span><br><span class="line">		<span class="comment">//找到第一个字母</span></span><br><span class="line">		<span class="keyword">do</span></span><br><span class="line">		&#123;</span><br><span class="line">			ch = fgetc(fp);</span><br><span class="line">			<span class="keyword">if</span> (feof(fp)) <span class="keyword">break</span>;<span class="comment">//防止空文件导致的无限循环</span></span><br><span class="line">		&#125; <span class="keyword">while</span> (!<span class="built_in">isalpha</span>(ch));</span><br><span class="line">		<span class="keyword">if</span> (feof(fp)) <span class="keyword">break</span>;<span class="comment">//防止因文件后面的空行而索引空字符串</span></span><br><span class="line">		<span class="comment">//读取单词，给索引项赋值</span></span><br><span class="line">		<span class="keyword">while</span> (<span class="built_in">isalpha</span>(ch))</span><br><span class="line">		&#123;</span><br><span class="line">			indexItem.term += ch;</span><br><span class="line">			ch = fgetc(fp);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		indexItem.frequence = <span class="number">1</span>;</span><br><span class="line">		indexItem.posting.push_back(docID);<span class="comment">//将本文件的文档ID加入posting</span></span><br><span class="line">		<span class="comment">//把索引项加入词典</span></span><br><span class="line">		indexList.push_back(indexItem);</span><br><span class="line">		num++;</span><br><span class="line">		<span class="comment">//清空索引项，准备下一次</span></span><br><span class="line">		indexItem.term=<span class="string">""</span>;</span><br><span class="line">		indexItem.posting.clear();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="索引文档集"><a href="#索引文档集" class="headerlink" title="索引文档集"></a>索引文档集</h2><p>索引文档弄好之后，索引整个文档集不过是加个循环而已</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//@name &lt;CIndex::indexCollection&gt;</span></span><br><span class="line"><span class="comment">//@brief &lt;索引文档集&gt;</span></span><br><span class="line"><span class="comment">//@return &lt;词项总数目&gt;</span></span><br><span class="line"><span class="keyword">int</span> CIndex::indexCollection()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">//打开对应的文件并索引</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; collection.size(); i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//打开文件</span></span><br><span class="line">		FILE* fp = fopen(collection[i].docName.c_str(), <span class="string">"r"</span>);</span><br><span class="line">		<span class="comment">//索引单篇文档</span></span><br><span class="line">		num+=indexDocument(fp, collection[i].docID);</span><br><span class="line">		<span class="comment">//关闭文件</span></span><br><span class="line">		fclose(fp);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> num;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="排序索引表"><a href="#排序索引表" class="headerlink" title="排序索引表"></a>排序索引表</h2><p>直接使用<code>&lt;algorithm&gt;</code>头文件里面的<code>sort()</code>函数进行排序，自定义比较函数<code>cmp()</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(IndexItem a, IndexItem b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> a.term&lt;b.term;<span class="comment">//词项按照从小到大排序</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> CIndex::sortIndex()</span><br><span class="line">&#123;</span><br><span class="line">	sort(indexList.begin(), indexList.end(), cmp);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="去重"><a href="#去重" class="headerlink" title="去重"></a>去重</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//@name &lt;CIndex::mergeIndex&gt;</span></span><br><span class="line"><span class="comment">//@brief &lt;索引表合并同类项&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> CIndex::mergeIndex()</span><br><span class="line">&#123;</span><br><span class="line">	IndexItem item1,item2;</span><br><span class="line">	</span><br><span class="line">	sortIndex();</span><br><span class="line">	<span class="built_in">vector</span>&lt;IndexItem&gt;::iterator it_cur=indexList.begin();<span class="comment">//创建迭代器</span></span><br><span class="line">	<span class="built_in">vector</span>&lt;IndexItem&gt;::iterator it_next = it_cur + <span class="number">1</span>;</span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; temp;</span><br><span class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::iterator p1, p2;<span class="comment">//用于合并posting的迭代器</span></span><br><span class="line">	<span class="keyword">while</span> (it_cur != indexList.end())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(it_cur+<span class="number">1</span>!=indexList.end()) it_next = it_cur + <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">while</span>((*it_cur).term == (*it_next).term)</span><br><span class="line">		&#123;<span class="comment">//这个循环内处理掉所有与当前词项重复的词项</span></span><br><span class="line">			</span><br><span class="line">			<span class="comment">//将二者的posting排序</span></span><br><span class="line">			sort((*it_cur).posting.begin(), (*it_cur).posting.end());</span><br><span class="line">			sort((*it_next).posting.begin(), (*it_next).posting.end());</span><br><span class="line">			<span class="comment">//有序合并两者的posting</span></span><br><span class="line">			p1 = (*it_cur).posting.begin();</span><br><span class="line">			p2 = (*it_next).posting.begin();</span><br><span class="line">			<span class="keyword">while</span> (p1 != (*it_cur).posting.end() &amp;&amp; p2 != (*it_next).posting.end())</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span> ((*p1) &lt; (*p2))<span class="comment">//结果集中加入较小的元素</span></span><br><span class="line">				&#123;</span><br><span class="line">					temp.push_back(*p1);</span><br><span class="line">					<span class="comment">//这个while用于跳过重复的元素</span></span><br><span class="line">					</span><br><span class="line">					p1++;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> <span class="keyword">if</span>((*p1) &gt; (*p2))</span><br><span class="line">				&#123;</span><br><span class="line">					temp.push_back(*p2);</span><br><span class="line">					</span><br><span class="line">					p2++;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span></span><br><span class="line">				&#123;</span><br><span class="line">					temp.push_back(*p1);</span><br><span class="line">					<span class="comment">//遇到相同的则两个都后移，避免出现重复</span></span><br><span class="line">					p1++;</span><br><span class="line">					p2++;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">while</span>(p1 != (*it_cur).posting.end())<span class="comment">//如果串1没有合并完则将串1后面部分直接复制</span></span><br><span class="line">			&#123;</span><br><span class="line">				temp.push_back(*p1);</span><br><span class="line">				p1++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">while</span>(p2 != (*it_next).posting.end())</span><br><span class="line">			&#123;</span><br><span class="line">				temp.push_back(*p2);</span><br><span class="line">				p2++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">//删除结果集重复部分</span></span><br><span class="line">			temp.erase(unique(temp.begin(), temp.end()), temp.end());</span><br><span class="line"></span><br><span class="line">			(*it_cur).frequence++;<span class="comment">//词频增加</span></span><br><span class="line">			(*it_cur).posting.assign(temp.begin(), temp.end());<span class="comment">//将结果复制</span></span><br><span class="line">			indexList.erase(it_next);<span class="comment">//删除重复项</span></span><br><span class="line">			temp.clear();</span><br><span class="line">			<span class="keyword">if</span> (it_cur + <span class="number">1</span> != indexList.end()) it_next = it_cur + <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		it_cur++;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">/*失败代码</span></span><br><span class="line"><span class="comment">	for (int i = 0; i &lt; indexList.size()-1; i++)</span></span><br><span class="line"><span class="comment">	&#123;</span></span><br><span class="line"><span class="comment">		item1 = indexList[i];</span></span><br><span class="line"><span class="comment">		item2 = indexList[i + 1];</span></span><br><span class="line"><span class="comment">		int j = 1;//j是相对于item1的偏移量</span></span><br><span class="line"><span class="comment">		while (item1.term == item2.term)</span></span><br><span class="line"><span class="comment">		&#123;</span></span><br><span class="line"><span class="comment">			vector&lt;int&gt; temp(item1.posting.size()+item2.posting.size());</span></span><br><span class="line"><span class="comment">			sort(item1.posting.begin(), item1.posting.end());</span></span><br><span class="line"><span class="comment">			sort(item2.posting.begin(), item2.posting.end());</span></span><br><span class="line"><span class="comment">			</span></span><br><span class="line"><span class="comment">			merge(item1.posting.begin(), item1.posting.end(), item2.posting.begin(), item2.posting.end(), temp.begin());</span></span><br><span class="line"><span class="comment">			indexList[i].posting.assign(temp.begin(), temp.end());</span></span><br><span class="line"><span class="comment">			indexList.erase(indexList.begin()+i+j);</span></span><br><span class="line"><span class="comment">			indexList[i].frequence++;</span></span><br><span class="line"><span class="comment">			</span></span><br><span class="line"><span class="comment">			item2 = indexList[i + j];</span></span><br><span class="line"><span class="comment">		&#125;</span></span><br><span class="line"><span class="comment">		j = 1;</span></span><br><span class="line"><span class="comment">	&#125;</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一开始使用的是普通的for循环，但是发现随着元素的删除，循环次数应该改变，因此改成了迭代器加while的方式。</p>
+<p>迭代器还是个蛮有用的东西，就是一个封装得比较好的指针。</p>
+<h2 id="main测试"><a href="#main测试" class="headerlink" title="main测试"></a>main测试</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"CIndex.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="built_in">string</span> fileList[<span class="number">6</span>] =</span><br><span class="line">&#123;</span><br><span class="line">	<span class="string">"doc1.txt"</span>,</span><br><span class="line">	<span class="string">"doc2.txt"</span>,</span><br><span class="line">	<span class="string">"doc3.txt"</span>,</span><br><span class="line">	<span class="string">"doc4.txt"</span>,</span><br><span class="line">	<span class="string">"doc5.txt"</span>,</span><br><span class="line">	<span class="string">"doc6.txt"</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">CIndex <span class="title">in</span><span class="params">(fileList,<span class="number">6</span>)</span></span>;</span><br><span class="line">	in.showCollection();</span><br><span class="line">	in.indexCollection();</span><br><span class="line">	in.mergeIndex();</span><br><span class="line">	in.showIndexList();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/c/" rel="tag"># c++</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/rats_and_poison/" rel="next" title="老鼠和毒药问题">
+                <i class="fa fa-chevron-left"></i> 老鼠和毒药问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/archive_project/" rel="prev" title="手工归档编程项目">
+                手工归档编程项目 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="憧憬少">
+            
+              <p class="site-author-name" itemprop="name">憧憬少</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/HaneChiri" title="GitHub &rarr; https://github.com/HaneChiri" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://space.bilibili.com/13290087" title="Bilibili &rarr; https://space.bilibili.com/13290087" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>Bilibili</a>
+                </span>
+              
+            </div>
+          
+		  
+		  
+		  
+		  
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tianruishi.github.io" title="https://tianruishi.github.io" rel="noopener" target="_blank">空白</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://zzdoreen.github.io/dist/index" title="https://zzdoreen.github.io/dist/index" rel="noopener" target="_blank">曾智</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://lollipopnougat.github.io/Crepeblog/" title="https://lollipopnougat.github.io/Crepeblog/" rel="noopener" target="_blank">封掣</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.cnblogs.com/1625--H/" title="https://www.cnblogs.com/1625--H/" rel="noopener" target="_blank">暮冥</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jxyzxy.github.io/" title="https://jxyzxy.github.io/" rel="noopener" target="_blank">晓宇</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#倒排索引简介"><span class="nav-text">倒排索引简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据结构设计"><span class="nav-text">数据结构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文档（Document）"><span class="nav-text">文档（Document）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引项（IndexItem）"><span class="nav-text">索引项（IndexItem）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引类（CIndex）"><span class="nav-text">索引类（CIndex）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#大致思路"><span class="nav-text">大致思路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码实现"><span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#有参构造函数"><span class="nav-text">有参构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引单篇文档"><span class="nav-text">索引单篇文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引文档集"><span class="nav-text">索引文档集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排序索引表"><span class="nav-text">排序索引表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#去重"><span class="nav-text">去重</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#main测试"><span class="nav-text">main测试</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">憧憬少</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+  <div style="display: none;">
+    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1276110171'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s96.cnzz.com/z_stat.php%3Fid%3D1276110171%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'D6yAkWdfKpiymkjB7yLOBmtu-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'D6yAkWdfKpiymkjB7yLOBmtu-gzGzoHsz',
+                'X-LC-Key': 'voaLXamEykorKePTABBVxnmH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":100,"height":200},"mobile":{"show":false}});</script></body>
+</html>

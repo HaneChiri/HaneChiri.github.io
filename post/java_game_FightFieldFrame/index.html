@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false,"dimmer":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="这学期的java课设弄完了，写个博客总结一下。 哔哩哔哩对应视频的传送门">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java基于AWT的对战小游戏">
+<meta property="og:url" content="https://hanechiri.github.io/post/java_game_FightFieldFrame/index.html">
+<meta property="og:site_name" content="尘世未解">
+<meta property="og:description" content="这学期的java课设弄完了，写个博客总结一下。 哔哩哔哩对应视频的传送门">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-26T14:56:06.747Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java基于AWT的对战小游戏">
+<meta name="twitter:description" content="这学期的java课设弄完了，写个博客总结一下。 哔哩哔哩对应视频的传送门">
+
+
+
+
+
+
+  <link rel="canonical" href="https://hanechiri.github.io/post/java_game_FightFieldFrame/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>java基于AWT的对战小游戏 | 尘世未解</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">尘世未解</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">过去不可追，未来尚可为</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-留言">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="https://github.com/HaneChiri/HaneChiri.github.io/issues" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>留言</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-解决方案">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/solution/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>解决方案</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hanechiri.github.io/post/java_game_FightFieldFrame/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="憧憬少">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="尘世未解">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">java基于AWT的对战小游戏
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-13 20:39:29" itemprop="dateCreated datePublished" datetime="2019-06-13T20:39:29+08:00">2019-06-13</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-26 22:56:06" itemprop="dateModified" datetime="2019-06-26T22:56:06+08:00">2019-06-26</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/项目总结/" itemprop="url" rel="index"><span itemprop="name">项目总结</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/post/java_game_FightFieldFrame/" class="leancloud_visitors" data-flag-title="java基于AWT的对战小游戏">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这学期的java课设弄完了，写个博客总结一下。</p>
+<p><a href="https://www.bilibili.com/video/av54526303/" target="_blank" rel="noopener">哔哩哔哩对应视频的传送门</a></p>
+<a id="more"></a>
+<h1 id="课设目的与要求"><a href="#课设目的与要求" class="headerlink" title="课设目的与要求"></a>课设目的与要求</h1><p>根据讲义中策略模式的案例，设计和实现一个基于<strong>策略模式</strong>的角色扮演游戏。其中包括主要有角色类及其子类、相关的行为类集合和测试类等。</p>
+<p>通过本次实验，能够在掌握面向对象程序设计的基本思想基础上；深化理解 Java 面向对象程序设计中消息、继承、多态、接口、抽象类和抽象方法等概念和实现方式；并进一步掌握 Java 程序设计中的基本语法和 Java程序运行方法等；理解和应用包（package）。</p>
+<h1 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h1><p>一个游戏中有多种角色(Character)，例如：国王（King）、皇后（Queen）、骑士（Knight）、老怪（Troll）。角色之间可能要发生战斗(fight)，每场战斗都是一个角色与另一角色之间的一对一战 斗。</p>
+<p>每个角色都有自己的生命值 (hitPoint) 、 魔法值（magicPoint）、攻击力值(damage)和防御力值(defense)。</p>
+<p>每种角色都有一种武器进行攻击（fight）；在程序运行中，可以动态修改角色的武器(setWeaponBehavior)。</p>
+<p>每种角色都有一种魔法对自己或者其他角色施法（performMagic）；可以动态改变拥有的魔法（setMagicBehavior）。</p>
+<ol>
+<li><p>首先设计和实现抽象类 Characters。</p>
+</li>
+<li><p>设计和实现 Character 类的几个子类：King、Queen、Knight、Troll。位</p>
+</li>
+<li><p>设计接口 WeaponBehavior 和 MagicBehavior。</p>
+<ul>
+<li><p>接 口 WeaponBehavior 的 实 现 类 ：</p>
+<ul>
+<li><p>KnifeBehavior （ 用 刀 ）</p>
+</li>
+<li><p>BowAndArrowBehavior （ 用 弓 箭 ）</p>
+</li>
+<li><p>AxeBehavior （ 用 斧 ）</p>
+</li>
+<li><p>SwordBehavior（用剑）</p>
+</li>
+</ul>
+</li>
+<li><p>接口MagicBehavior的实现类：</p>
+<ul>
+<li>HealBehavior（治疗）</li>
+<li>InvisibleBehavior（隐身）。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>实现接口中的抽象方法，可以只在屏幕输出简单信息，也可以结合生命值(hitPoint)、攻击力值(damage)和防御力值(defense)计算。</p>
+<ol start="4">
+<li><p>编写测试代码，对以上设计的系统进行测试。要求在程序运行期间，能动态改变角色拥有的武器或者魔法。</p>
+</li>
+<li><p>自己添加一种角色、或者添加一种武器及魔法，设计相应的类，并编写测试代码进行测试。</p>
+</li>
+<li><p>按照 Java 的规范，添加详细的文档注释，并用 Javadoc 生成标准的帮助文档。</p>
+</li>
+<li><p>将上述编译、运行、生成帮助文档的命令，填写至实验报告相应位置。</p>
+</li>
+<li><p>填写实验报告。并将程序代码及生成的帮助文档打包上交。</p>
+</li>
+</ol>
+<h1 id="涉及的主要内容"><a href="#涉及的主要内容" class="headerlink" title="涉及的主要内容"></a>涉及的主要内容</h1><ol>
+<li>单例模式。游戏窗口只能有一个对象，因此使用了单例模式。</li>
+<li>策略模式。在角色类中有两个抽象策略（武器策略和魔法策略），具体策略在类中实现。</li>
+<li>双缓冲技术。在绘制游戏画面的时候使用了双缓冲技术，防止画面闪烁。</li>
+<li>多线程。在两处使用了多线程，一处是为了解决按键冲突的问题，另一处是为了实现游戏周期性判定的功能。</li>
+<li>awt。</li>
+</ol>
+<h1 id="基本逻辑流程"><a href="#基本逻辑流程" class="headerlink" title="基本逻辑流程"></a>基本逻辑流程</h1><ol>
+<li>抽象角色类由具体子类实现，子类主要实现了抽象方法<code>getAppearance</code>，用于获取角色的外貌（即图片），外貌会根据角色状态的不同而改变，比如角色死亡时外貌是墓碑；</li>
+<li>根据角色的坐标以及属性（例如是否隐身，当前武器是什么）来绘制角色以及属性条、武器栏和魔法栏。</li>
+<li>游戏时钟周期线程用于周期性地执行一些操作，例如每秒钟恢复一定的HP和MP，对于隐身状态的角色，每秒钟扣除一定量的MP等。</li>
+</ol>
+<h1 id="游戏说明"><a href="#游戏说明" class="headerlink" title="游戏说明"></a>游戏说明</h1><ol>
+<li><strong>玩家1操作：</strong>键盘上A键D键分别对应左右移动，J键使用武器攻击，K键使用魔法，L键切换武器，O键切换魔法；</li>
+<li><strong>玩家2操作：</strong>键盘上←键→键分别对应左右移动，小键盘上，1键使用武器攻击，2键使用魔法，3键切换武器，6键切换魔法；</li>
+<li>每把武器有自己的攻击威力和攻击距离，只有在两个角色的距离在武器的攻击范围内时，才能够攻击成功；</li>
+<li>伤害计算公式为：被攻击者受到的最终伤害=攻击者攻击力+攻击者武器威力-被攻击者的防御力。若伤害小于等于0，则不予扣除；</li>
+<li>每秒钟会恢复一定量的HP和MP；</li>
+<li>一方死亡（HP降为0及以下）则游戏结束。</li>
+</ol>
+<h1 id="设计与实现"><a href="#设计与实现" class="headerlink" title="设计与实现"></a>设计与实现</h1><h2 id="主要框架"><a href="#主要框架" class="headerlink" title="主要框架"></a>主要框架</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FightFieldFrame</span> <span class="keyword">extends</span> <span class="title">Frame</span></span>&#123;</span><br><span class="line">	<span class="comment">//一些游戏常量以及窗口</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Dimension 		SCREEN_DIMENSION=Toolkit.getDefaultToolkit().getScreenSize();</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FFF_X=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FFF_Y=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FFF_HEIGHT=SCREEN_DIMENSION.height;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FFF_WIDTH=SCREEN_DIMENSION.width;</span><br><span class="line"><span class="comment">//……省略其他成员函数，下面会列举来说明</span></span><br><span class="line"><span class="comment">/*******************main函数**************************/</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">		FightFieldFrame f=getInstance(<span class="string">"战斗领域"</span>);</span><br><span class="line">		f.initFrame();</span><br><span class="line">		<span class="comment">//初始化角色</span></span><br><span class="line">		f.initCharacter();</span><br><span class="line">		<span class="comment">//添加事件监听者</span></span><br><span class="line">		f.addWindowListener(<span class="keyword">new</span> MyWindowListener());</span><br><span class="line">		f.addKeyListener(<span class="keyword">new</span> GamePad(player1,player2,f));</span><br><span class="line">		<span class="comment">//新建时钟线程，用于游戏中的周期性属性检查</span></span><br><span class="line">		Thread clockThread=<span class="keyword">new</span> Thread(<span class="keyword">new</span> ClockThread(player1, player2, fff));</span><br><span class="line">		clockThread.start();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h2><p>FightFieldFrame 类中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//只能有一个窗体对象，使用单例模式</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> FightFieldFrame fff;<span class="comment">//单例模式使用的对象</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">FightFieldFrame</span><span class="params">(String title)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">super</span>(title);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> FightFieldFrame <span class="title">getInstance</span><span class="params">(String title)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(fff==<span class="keyword">null</span>) &#123;</span><br><span class="line">		fff=<span class="keyword">new</span> FightFieldFrame(title);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> fff;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="双缓冲"><a href="#双缓冲" class="headerlink" title="双缓冲"></a>双缓冲</h2><p>双缓冲因为有两个绘图对象而得名，先在一个image对象上绘图然后再将此对象绘制到Frame上，用于减少重绘时的闪烁。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 初始化框架的位置和大小，以及缓冲对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initFrame</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">//这里准备一些对象构造完成之后才能做的事情</span></span><br><span class="line">	fff.setVisible(<span class="keyword">true</span>);</span><br><span class="line">	setBounds(FFF_X, FFF_Y, FFF_WIDTH, FFF_HEIGHT);</span><br><span class="line">		</span><br><span class="line">	Dimension d=getSize();</span><br><span class="line">	imgBuffer=createImage(d.width, d.height);</span><br><span class="line">    gBuffer=imgBuffer.getGraphics();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建好缓冲对象后，在缓冲对象上绘制：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">paint</span><span class="params">(Graphics g)</span> </span>&#123;	</span><br><span class="line">	<span class="comment">//全都先绘制在缓冲区		</span></span><br><span class="line">	<span class="comment">//绘制背景</span></span><br><span class="line">	Image background=getToolkit().getImage(<span class="string">"image\\background.jpg"</span>);</span><br><span class="line">	<span class="keyword">if</span>(background!=<span class="keyword">null</span>) &#123;</span><br><span class="line">		gBuffer.drawImage(background, FFF_X, FFF_Y, FFF_WIDTH, FFF_HEIGHT, <span class="keyword">this</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//绘制人物</span></span><br><span class="line">	<span class="keyword">if</span>(player1!=<span class="keyword">null</span>) &#123;</span><br><span class="line">		drawCharacter(gBuffer,player1);</span><br><span class="line">		drawStrand(gBuffer, player1);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(player2!=<span class="keyword">null</span>) &#123;</span><br><span class="line">		drawCharacter(gBuffer,player2);</span><br><span class="line">		drawStrand(gBuffer, player2);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	drawSlot(gBuffer);</span><br><span class="line">	<span class="comment">//drawStrand(gBuffer);//绘制绝对位置的属性条，由于没有什么技术含量就只做了一个示例</span></span><br><span class="line">	<span class="comment">//由于使用了背景图片，所以不必特地清空背景</span></span><br><span class="line">	g.drawImage(imgBuffer, <span class="number">0</span>, <span class="number">0</span>, <span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是，即便如此仍然会闪烁，这是因为重绘时调用的update函数会将Frame用背景色填充一次 再绘制。所以应该覆盖掉原本的方法，让它只绘制，不清空：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//======================//</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Graphics g)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//覆盖原本的方法</span></span><br><span class="line">	paint(g);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//======================/*/</span></span><br></pre></td></tr></table></figure>
+<h2 id="玩家操纵"><a href="#玩家操纵" class="headerlink" title="玩家操纵"></a>玩家操纵</h2><p>使用GamePad类作为键盘监听者，监听Frame的按键，调用角色对应的方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 游戏手柄类</span></span><br><span class="line"><span class="comment"> * 用于将键位与角色的动作对应起来</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GamePad</span> <span class="keyword">implements</span> <span class="title">KeyListener</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Characters player1;<span class="comment">//玩家1</span></span><br><span class="line">	<span class="keyword">private</span> Characters player2;<span class="comment">//玩家2</span></span><br><span class="line">	<span class="keyword">private</span> FightFieldFrame fff;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">GamePad</span><span class="params">(Characters p1, Characters p2, FightFieldFrame f)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated constructor stub</span></span><br><span class="line">		player1=p1;</span><br><span class="line">		player2=p2;</span><br><span class="line">		fff=f;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">keyPressed</span><span class="params">(KeyEvent e)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> code=e.getKeyCode();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">switch</span> (code) &#123;</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_J:<span class="comment">//玩家1攻击</span></span><br><span class="line">			player1.fight(player2);</span><br><span class="line">			player2.display();</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_K:<span class="comment">//玩家1使用魔法</span></span><br><span class="line">			player1.performMagic(player2);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_A:<span class="comment">//玩家1左</span></span><br><span class="line">			player1.setMoveLeftFlag(<span class="keyword">true</span>);</span><br><span class="line">			player1.setDirection(<span class="keyword">true</span>);<span class="comment">//false为朝右，true为朝左</span></span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_D:<span class="comment">//玩家1右</span></span><br><span class="line">			player1.setMoveRightFlag(<span class="keyword">true</span>);</span><br><span class="line">			player1.setDirection(<span class="keyword">false</span>);</span><br><span class="line">			<span class="keyword">break</span>;		</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_L:<span class="comment">//玩家1切换武器</span></span><br><span class="line">			player1.changeWeapon();</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_O:<span class="comment">//玩家1切换魔法</span></span><br><span class="line">			player1.changeMagic();</span><br><span class="line">			<span class="keyword">break</span>;	</span><br><span class="line">		<span class="comment">/****************************************************************/</span></span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_NUMPAD1:<span class="comment">//玩家2攻击</span></span><br><span class="line">			player2.fight(player1);</span><br><span class="line">			player1.display();	</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_NUMPAD2:<span class="comment">//玩家2使用魔法</span></span><br><span class="line">			player2.performMagic(player1);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_LEFT:<span class="comment">//玩家2左</span></span><br><span class="line">			player2.setMoveLeftFlag(<span class="keyword">true</span>);</span><br><span class="line">			player2.setDirection(<span class="keyword">true</span>);<span class="comment">//false为朝右，true为朝左</span></span><br><span class="line">			<span class="keyword">break</span>;	</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_RIGHT:<span class="comment">//玩家2右</span></span><br><span class="line">			player2.setMoveRightFlag(<span class="keyword">true</span>);</span><br><span class="line">			player2.setDirection(<span class="keyword">false</span>);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_NUMPAD3:<span class="comment">//玩家2切换武器</span></span><br><span class="line">			player2.changeWeapon();</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_NUMPAD6:<span class="comment">//玩家2切换魔法</span></span><br><span class="line">			player2.changeMagic();</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		fff.repaint();<span class="comment">//重绘</span></span><br><span class="line">			</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">keyReleased</span><span class="params">(KeyEvent e)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> code=e.getKeyCode();	</span><br><span class="line">		<span class="keyword">switch</span> (code) &#123;</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_J:		</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_A:<span class="comment">//左</span></span><br><span class="line">			player1.setMoveLeftFlag(<span class="keyword">false</span>);		</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_D:<span class="comment">//右</span></span><br><span class="line">			player1.setMoveRightFlag(<span class="keyword">false</span>);			</span><br><span class="line">			<span class="keyword">break</span>;			</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_K:</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_NUMPAD1:			</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_LEFT:</span><br><span class="line">			player2.setMoveLeftFlag(<span class="keyword">false</span>);</span><br><span class="line">			<span class="keyword">break</span>;			</span><br><span class="line">		<span class="keyword">case</span> KeyEvent.VK_RIGHT:</span><br><span class="line">			player2.setMoveRightFlag(<span class="keyword">false</span>);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		fff.repaint();<span class="comment">//重绘</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">keyTyped</span><span class="params">(KeyEvent e)</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意，这里控制角色左右移动并不是直接调用角色的移动方法，而是更改角色移动的标志变量，利用线程来调用角色的移动方法。这样可以解决角色的按键冲突问题。</p>
+<h2 id="角色移动线程"><a href="#角色移动线程" class="headerlink" title="角色移动线程"></a>角色移动线程</h2><p>移动线程只负责发送消息给角色，而角色移动的具体判定由角色自身完成，从而更好地实现面向对象的思想。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MoveThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Characters character;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">MoveThread</span><span class="params">(Characters c)</span> </span>&#123;</span><br><span class="line">		character=c;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">			<span class="comment">//线程只负责发送消息，让角色自己判断移动</span></span><br><span class="line">			character.moveRight();</span><br><span class="line">			character.moveLeft();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面这是Characters类中的角色移动函数，添加了延时以免在按下移动按键的一瞬间，角色移动太快出了屏幕外面。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 向左移动&lt;br/&gt;</span></span><br><span class="line"><span class="comment">	 * 由于两个线程各自操作自己的角色，所以此函数不需要同步</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">moveLeft</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!isAliveFlag) <span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">if</span>(moveLeftFlag) &#123;</span><br><span class="line">		x-=<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			Thread.sleep(<span class="number">1</span>);<span class="comment">//防止跑得太快</span></span><br><span class="line">		&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 向右移动&lt;br/&gt;</span></span><br><span class="line"><span class="comment"> * 由于两个线程各自操作自己的角色，所以此函数不需要同步</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">moveRight</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!isAliveFlag) <span class="keyword">return</span>;</span><br><span class="line">	<span class="keyword">if</span>(moveRightFlag) &#123;</span><br><span class="line">		x+=<span class="number">1</span>;		</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			Thread.sleep(<span class="number">1</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="武器攻击实现机制"><a href="#武器攻击实现机制" class="headerlink" title="武器攻击实现机制"></a>武器攻击实现机制</h2><p>在Characters类中，使用武器进行攻击的方法如下，它的主要逻辑是调用useWeapon方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 攻击某个角色</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> c 要攻击的角色</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 造成的真实伤害</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">fight</span><span class="params">(Characters c)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//由于武器有不同的特性，所以伤害的逻辑让武器实现</span></span><br><span class="line">	<span class="comment">//比如后期编写高级玩法时，弓需要计算射程</span></span><br><span class="line">	<span class="keyword">if</span>(!isAliveFlag) <span class="keyword">return</span> <span class="number">0</span>;<span class="comment">//如果已死亡，直接返回，下同</span></span><br><span class="line">	<span class="keyword">if</span>(weapon==<span class="keyword">null</span>) &#123;</span><br><span class="line">		System.out.println(name+<span class="string">"没有武器，无法攻击"</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> attackRange=weapon.getAttackRange();</span><br><span class="line">	<span class="keyword">if</span>(attackRange&gt;distance(c)) &#123;</span><br><span class="line">		<span class="comment">//攻击距离大于角色之间的距离才可攻击</span></span><br><span class="line">		<span class="keyword">return</span> weapon.useWeapon(<span class="keyword">this</span>,c);<span class="comment">//此角色攻击角色c</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>角色类的两个属性，武器和魔法，使用的都是对应接口的引用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> WeaponBehavior weapon;<span class="comment">//武器</span></span><br><span class="line"><span class="keyword">protected</span> MagicBehavior magic;<span class="comment">//魔法</span></span><br><span class="line"></span><br><span class="line">以下是武器接口：</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">WeaponBehavior</span> </span>&#123;</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 使用武器</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> attacker 武器持有者</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> victim 被攻击者</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span> 造成的真实伤害</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">useWeapon</span><span class="params">(Characters attacker,Characters victim)</span></span>;<span class="comment">//使用武器</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAttackRange</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Image <span class="title">getAppearance</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">以下是具体的武器实现（以剑为例，其他大同小异）：</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 剑</span></span><br><span class="line"><span class="comment"> * 实现武器接口</span></span><br><span class="line"><span class="comment"> * 威力中等，攻击距离中等</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwordBehavior</span> <span class="keyword">implements</span> <span class="title">WeaponBehavior</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> String name=<span class="string">"剑"</span>;</span><br><span class="line">	<span class="keyword">private</span> Image appearance;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DAMAGE=<span class="number">6</span>;<span class="comment">//武器基础威力</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> ATTACK_RANGE=<span class="number">200</span>;<span class="comment">//武器攻击距离,单位px</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String APPEARANCE_PATH=<span class="string">"image\\Weapon\\Sword.png"</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SwordBehavior</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SwordBehavior</span><span class="params">(String _name)</span> </span>&#123;</span><br><span class="line">		name=_name;<span class="comment">//剑，岂能无名OVO</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 使用武器攻击</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> attacker 攻击者</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> victim 被攻击者</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">useWeapon</span><span class="params">(Characters attacker,Characters victim)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> attackDamage=DAMAGE+attacker.getDamage();<span class="comment">//造成的伤害为攻击者的伤害加上武器威力</span></span><br><span class="line">		<span class="keyword">int</span> finalDamage=victim.hitBy(attacker, attackDamage);</span><br><span class="line">		System.out.println(attacker.getName()+<span class="string">"使用"</span>+name+<span class="string">"对"</span>+victim.getName()+<span class="string">"造成了"</span>+finalDamage+<span class="string">"点伤害"</span>);</span><br><span class="line">		<span class="keyword">return</span> finalDamage;<span class="comment">//返回最终伤害</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> name;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAttackRange</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> ATTACK_RANGE;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Image <span class="title">getAppearance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		appearance=Toolkit.getDefaultToolkit().getImage(APPEARANCE_PATH);</span><br><span class="line">		<span class="keyword">return</span> appearance;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里面主要的代码是useWeapon方法里面调用的角色类的hitBy方法，里面有着伤害计算逻辑：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 被某个角色攻击</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> attacker 攻击者</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> attackDamage 攻击者给予的攻击伤害</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 最后造成的真实伤害</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hitBy</span><span class="params">(Characters attacker,<span class="keyword">int</span> attackDamage)</span> </span>&#123;<span class="comment">//被攻击</span></span><br><span class="line">	<span class="keyword">if</span>(!isAliveFlag) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> finalDamage=(attackDamage-defense);<span class="comment">//伤害计算：最终伤害=敌方攻击伤害-我方防御力</span></span><br><span class="line">	<span class="keyword">if</span>(incHP(-finalDamage)==-<span class="number">1</span>) &#123;<span class="comment">//如果血量被扣到负数</span></span><br><span class="line">		<span class="keyword">this</span>.killedBy(attacker);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> finalDamage;<span class="comment">//返回最后造成的真实伤害</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>魔法的实现机制大同小异，不做特殊说明。</p>
+<h2 id="武器切换和魔法切换"><a href="#武器切换和魔法切换" class="headerlink" title="武器切换和魔法切换"></a>武器切换和魔法切换</h2><p>实现方法是在角色类里面声明数组：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> WeaponBehavior weaponSlots[];<span class="comment">//武器栏位，用于存储角色携带的武器</span></span><br><span class="line"><span class="keyword">protected</span> MagicBehavior magicSlots[];<span class="comment">//魔法栏位</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">int</span> weaponSlotsIndex=<span class="number">0</span>;<span class="comment">//栏位索引，指示当前武器</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">int</span> magicSlotsIndex=<span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>以切换武器为例，如果当前武器是最后一把，那么换回第一把，否则索引自增：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 按顺序切换武器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">changeWeapon</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	setWeaponBehavior(weaponSlots[weaponSlotsIndex]);</span><br><span class="line">	<span class="keyword">if</span>(weaponSlotsIndex+<span class="number">1</span>&gt;=weaponSlots.length) &#123;</span><br><span class="line">		weaponSlotsIndex=<span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		weaponSlotsIndex++;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="时钟线程"><a href="#时钟线程" class="headerlink" title="时钟线程"></a>时钟线程</h2><p>时钟线程用于进行一些游戏周期性方法的调用，比如周期性恢复HP，对角色属性值的判断等。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 时钟线程，用于一些周期性的计算</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClockThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Characters player1;<span class="comment">//玩家1</span></span><br><span class="line">	<span class="keyword">private</span> Characters player2;<span class="comment">//玩家2</span></span><br><span class="line">	<span class="keyword">private</span> FightFieldFrame fff;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> interval=<span class="number">1000</span>;<span class="comment">//时钟周期</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">ClockThread</span><span class="params">(Characters p1, Characters p2, FightFieldFrame f)</span> </span>&#123;</span><br><span class="line">		player1=p1;</span><br><span class="line">		player2=p2;</span><br><span class="line">		fff=f;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 核对属性，并对于特定属性作出不同的事情</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> c 核对角色c的属性</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cheackStatus</span><span class="params">(Characters c)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">switch</span> (c.getStatus()) &#123;</span><br><span class="line">		<span class="keyword">case</span> Characters.ST_INVISIBLE:<span class="comment">//隐身魔法每个周期扣除一定的魔力</span></span><br><span class="line">			<span class="keyword">if</span>(c.incMP(-InvisibleBehavior.COST)==-<span class="number">1</span>) &#123;<span class="comment">//如果魔力不够</span></span><br><span class="line">				c.setStatus(Characters.ST_NORMAL);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 周期性恢复属性值（回血回魔）</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> c 周期性恢复角色c的HP和MP</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">recover</span><span class="params">(Characters c)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(!c.getIsAliveFlag()) <span class="keyword">return</span>;<span class="comment">//角色死亡就不再回血</span></span><br><span class="line">		c.incHP(Characters.HP_RECOVER);</span><br><span class="line">		c.incMP(Characters.MP_RECOVER);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">			<span class="comment">//做这个周期要做的事情			</span></span><br><span class="line">			cheackStatus(player1);</span><br><span class="line">			cheackStatus(player2);</span><br><span class="line">			recover(player1);</span><br><span class="line">			recover(player2);	</span><br><span class="line">			fff.repaint();</span><br><span class="line">			<span class="comment">//等待下一个周期</span></span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				Thread.sleep(interval);</span><br><span class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a href="https://www.oschina.net/uploads/doc/javase-6-doc-api-zh_CN/java/awt/class-use/Image.html" target="_blank" rel="noopener">java.awt.Image官方文档</a></li>
+<li><a href="https://www.cnblogs.com/bigthing33/p/5148807.html" target="_blank" rel="noopener">使用eclipse生成javadoc-博客园</a></li>
+<li><a href="https://blog.csdn.net/kai_wei_zhang/article/details/8120382" target="_blank" rel="noopener">java双缓冲技术-CSDN</a></li>
+<li><a href="https://blog.csdn.net/u011393661/article/details/38434581" target="_blank" rel="noopener">java获取屏幕大小-CSDN</a></li>
+<li><a href="https://www.jb51.net/article/31981.htm" target="_blank" rel="noopener">java线程传参三种方式-脚本之家</a></li>
+<li><a href="https://y-1746119035.iteye.com/blog/2094687" target="_blank" rel="noopener">游戏角色移动流畅度的处理-ITeye</a></li>
+<li><a href="https://blog.csdn.net/qq_34781336/article/details/80569632" target="_blank" rel="noopener">eclipse调试方式和快捷键-CSDN</a></li>
+<li><a href="https://www.bilibili.com/video/av40583293?from=search&amp;seid=15415941635306934765" target="_blank" rel="noopener">一个讲eclipse调试的b站视频（靠这个视频解决了调试问题）-bilibili</a></li>
+<li><a href="https://blog.csdn.net/asd765028286/article/details/78365274" target="_blank" rel="noopener">绘制字体修改-CSDN</a></li>
+</ul>
+<h1 id="体会"><a href="#体会" class="headerlink" title="体会"></a>体会</h1><p>这次课设对我来说是个挑战，首先时间比较紧张，和考试放在了一周，并且用的是学了几周还没私底下练习多少的JAVA。不过还是做的让我自己比较满意。</p>
+<p>我选择的是看上去较为简单的一道题目，虽然简单，但是这个题目的可扩展性很强，可以尽情开脑洞，我看中的就是这一点。我在高中的时候就尝试使用Visual Basic来编写类似的小游戏，一些可能会遇到的困难在那时已经思考过了，所以总体来说没有遇到太过麻烦的地方。</p>
+<p>随着经验的增长，我逐渐开始一边编程一边整理，让以后的自己也能够回顾这一次的项目。在写完这个课设之后，我用录屏软件录制了一个视频来整体讲述我编写过程中的思路，并上传到了Bilibili弹幕视频网站，总结经验，分享思路，以及为了便于以后回顾。地址是（<a href="https://www.bilibili.com/video/av54526303/）" target="_blank" rel="noopener">https://www.bilibili.com/video/av54526303/）</a></p>
+<p>当然，过程中也遇到了一些问题。</p>
+<p>比如绘制图片的时候遇到了只能使用绝对路径的问题，在老师上课演示的过程中也遇到过这个问题，后来我知道了JAVA相对路径是以项目根目录为基准而不是以文件目录为基准的。</p>
+<p>比如角色控制按键冲突。解决方法是使用多线程，两个线程控制分别控制两个角色。</p>
+<p>比如游戏周期性事件。在以前我使用Visual Basic的时候，是利用时钟控件来解决这个问题的，而JAVA里面可以使用线程来模拟那个时钟控件。这让我对时钟控件的原理有了比较好的认识。</p>
+<p>在假期里面，我可能会通过继续完善这个小游戏，来更加深入地学习JAVA。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/python_spider_note5optimization_of_the_spider_class/" rel="next" title="python爬虫学习笔记5爬虫类结构优化">
+                <i class="fa fa-chevron-left"></i> python爬虫学习笔记5爬虫类结构优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/Scrapy_spider_bilibiliRank/" rel="prev" title="练习利用Scrapy爬取b站排行榜">
+                练习利用Scrapy爬取b站排行榜 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="憧憬少">
+            
+              <p class="site-author-name" itemprop="name">憧憬少</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/HaneChiri" title="GitHub &rarr; https://github.com/HaneChiri" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://space.bilibili.com/13290087" title="Bilibili &rarr; https://space.bilibili.com/13290087" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>Bilibili</a>
+                </span>
+              
+            </div>
+          
+		  
+		  
+		  
+		  
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tianruishi.github.io" title="https://tianruishi.github.io" rel="noopener" target="_blank">空白</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://zzdoreen.github.io/dist/index" title="https://zzdoreen.github.io/dist/index" rel="noopener" target="_blank">曾智</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://lollipopnougat.github.io/Crepeblog/" title="https://lollipopnougat.github.io/Crepeblog/" rel="noopener" target="_blank">封掣</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.cnblogs.com/1625--H/" title="https://www.cnblogs.com/1625--H/" rel="noopener" target="_blank">暮冥</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jxyzxy.github.io/" title="https://jxyzxy.github.io/" rel="noopener" target="_blank">晓宇</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#课设目的与要求"><span class="nav-text">课设目的与要求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内容"><span class="nav-text">内容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#涉及的主要内容"><span class="nav-text">涉及的主要内容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本逻辑流程"><span class="nav-text">基本逻辑流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游戏说明"><span class="nav-text">游戏说明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设计与实现"><span class="nav-text">设计与实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主要框架"><span class="nav-text">主要框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单例模式"><span class="nav-text">单例模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#双缓冲"><span class="nav-text">双缓冲</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#玩家操纵"><span class="nav-text">玩家操纵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#角色移动线程"><span class="nav-text">角色移动线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#武器攻击实现机制"><span class="nav-text">武器攻击实现机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#武器切换和魔法切换"><span class="nav-text">武器切换和魔法切换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时钟线程"><span class="nav-text">时钟线程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考链接"><span class="nav-text">参考链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#体会"><span class="nav-text">体会</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">憧憬少</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+  <div style="display: none;">
+    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1276110171'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s96.cnzz.com/z_stat.php%3Fid%3D1276110171%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'D6yAkWdfKpiymkjB7yLOBmtu-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'D6yAkWdfKpiymkjB7yLOBmtu-gzGzoHsz',
+                'X-LC-Key': 'voaLXamEykorKePTABBVxnmH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":100,"height":200},"mobile":{"show":false}});</script></body>
+</html>

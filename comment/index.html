@@ -1,0 +1,15 @@
+<div id="container"></div>
+<link rel="stylesheet" href="gitment.css">
+<script src="gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: window.location.pathname
+  owner: 'HaneChiri',
+  repo: 'HaneChiri.github.io',
+  oauth: {
+    client_id: '36c77337afa730183d46',
+    client_secret: '7ab9009268f85ff79e674975e01880ae0751dcb1',
+  },
+})
+gitment.render('container')
+</script>
