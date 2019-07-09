@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[python读取ini文件失败的原因]]></title>
+    <url>%2Fpost%2Fpython_read_ini_No_section%2F</url>
+    <content type="text"><![CDATA[尝试使用python的configparser来读取ini配置文件，但是遇到了No Section的错误。 最终发现其实是路径出了问题。 问题描述初始代码简化之后是： 1234567from configparser import ConfigParserif __name__ == '__main__': config=ConfigParser()#创建配置对象 config.read('test.ini')#读取配置文件 result=config.get(section='test',option='name')#读取test下的name print(result) 同目录的test.ini的内容如下： 12[test]name = tom 但是运行出现了configparser.NoSectionError: No section: &#39;test&#39;的错误 原因探索经过单步调试后发现并没有读取到文件的内容，猜测可能是没有找到文件。 以前在import自定义模块的时候遇到过类似的问题，当时的解决方法是把当前工作路径设置为正在执行的文件所在的路径。 解决方案 使用绝对路径 将当前工作路径改为当前文件路径，再使用相对路径 第二种方法的代码如下： 12345678910from configparser import ConfigParserimport osif __name__ == '__main__': curpath=os.path.dirname(os.path.realpath(__file__)) filename=os.path.join(curpath,"test.ini") config=ConfigParser()#创建配置对象 config.read(filename)#读取配置文件 result=config.get(section='test',option='name')#读取test下的name print(result)]]></content>
+      <categories>
+        <category>过程记录</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[excel实现周总结签到积分制]]></title>
     <url>%2Fpost%2Fexcel_weekly_sign%2F</url>
     <content type="text"><![CDATA[我在自己一个学习群里设定了一个周总结制度，这篇博客记录一下如何使用excel函数来实现计算打卡相册的积分。这里其实我用的是wps表格，但是函数一样，所以我就分类在excel里面。 简介每周日，每个人在群聊天发一个周总结，内容是自己这周学习了什么，没有限制，只是给大家一个自我反省的机会。 如果没有可以写的东西，那么也在群里面报备，方式为在群聊天中说：“本周无总结”或者别的能表明这一事实的话。别有压力，只是回复一句话的功夫。 如果没有报备也没有在截止之前发周总结，将会被艾特提醒。可以在下一周总结之前补。 为了方便描述，下文把发送周总结称为“签到” 积分规则 如果本周签到了，积分=原本积分+正调整参数 如果未签到，积分=原本积分+负调整参数 如果补签到，积分=原本积分 签到登记表样例 成员ID 昵称 正常签到次数 周总结积分 week1 week2 week3 week4 week5 week6 1 憧憬少 1 1 1 2 听星缘 1 1 1 3 简白 1 1 1 4 HUST 1 1 1 5 咸鱼米 1 1 1 1表示已签到，-1表示未签到，补签改为0 编写公式正常签到次数即计算1出现的次数（补签不算），如果用之前的SUMIF函数就是： 1=SUMIF(对应成员的签到区域,1) 但是我又查到一个更适合的函数：COUNTIF 参数和SUMIF差不多含义，写成公式也是一样 1=COUNTIF(对应成员的签到区域,1) 但是前者只能计算1出现的次数，如果计算-1出现的次数就不行了。 周总结积分比较简单，不赘述了。 1=COUNTIF(E2:ZZ2,1)*积分规则!$C$3+COUNTIF(E2:ZZ2,-1)*积分规则!$D$3*(-1)]]></content>
