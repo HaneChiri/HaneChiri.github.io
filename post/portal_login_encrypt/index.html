@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false,"dimmer":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="以前写的爬虫无法登录到学校的信息门户上去了，因为门户的新JS代码将表单的密码先加密了一次，再将其与别的表单数据POST过去。使用的是AES加密的CBC模式。 本文前半部分是我的python组长雁横给组员们讲解的信息门户的密码加密思路，然后由我总结成文，后半部分是我自己写的加密代码实现，使用python的PyCryptodome库来进行加密。">
+<meta name="keywords" content="python,spider,package">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学校信息门户模拟登录之密码加密">
+<meta property="og:url" content="https://hanechiri.github.io/post/portal_login_encrypt/index.html">
+<meta property="og:site_name" content="尘世未解">
+<meta property="og:description" content="以前写的爬虫无法登录到学校的信息门户上去了，因为门户的新JS代码将表单的密码先加密了一次，再将其与别的表单数据POST过去。使用的是AES加密的CBC模式。 本文前半部分是我的python组长雁横给组员们讲解的信息门户的密码加密思路，然后由我总结成文，后半部分是我自己写的加密代码实现，使用python的PyCryptodome库来进行加密。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190718144535.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190718160057.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190718145319.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190718145605.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190718145810.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190718145859.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/QQ%E5%9B%BE%E7%89%8720190718160740.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/QQ%E5%9B%BE%E7%89%8720190718160734.png">
+<meta property="og:updated_time" content="2019-07-18T08:11:18.034Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="学校信息门户模拟登录之密码加密">
+<meta name="twitter:description" content="以前写的爬虫无法登录到学校的信息门户上去了，因为门户的新JS代码将表单的密码先加密了一次，再将其与别的表单数据POST过去。使用的是AES加密的CBC模式。 本文前半部分是我的python组长雁横给组员们讲解的信息门户的密码加密思路，然后由我总结成文，后半部分是我自己写的加密代码实现，使用python的PyCryptodome库来进行加密。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190718144535.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://hanechiri.github.io/post/portal_login_encrypt/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>学校信息门户模拟登录之密码加密 | 尘世未解</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">尘世未解</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">过去不可追，未来尚可为</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-留言">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="https://github.com/HaneChiri/HaneChiri.github.io/issues" rel="noopener" target="_blank"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>留言</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-解决方案">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/solution/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>解决方案</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hanechiri.github.io/post/portal_login_encrypt/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="憧憬少">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="尘世未解">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">学校信息门户模拟登录之密码加密
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-18 14:31:10 / 修改时间：16:11:18" itemprop="dateCreated datePublished" datetime="2019-07-18T14:31:10+08:00">2019-07-18</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/项目总结/" itemprop="url" rel="index"><span itemprop="name">项目总结</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/post/portal_login_encrypt/" class="leancloud_visitors" data-flag-title="学校信息门户模拟登录之密码加密">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>以前写的爬虫无法登录到学校的信息门户上去了，因为门户的新JS代码将表单的密码先加密了一次，再将其与别的表单数据POST过去。使用的是AES加密的CBC模式。</p>
+<p>本文前半部分是我的python组长<strong>雁横</strong>给组员们讲解的信息门户的密码加密思路，然后由我总结成文，后半部分是我自己写的加密代码实现，使用python的<code>PyCryptodome</code>库来进行加密。</p>
+<a id="more"></a>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a href="https://www.cnblogs.com/mojita/p/5769350.html" target="_blank" rel="noopener">浏览器开发者工具基本使用教程-博客园</a></li>
+<li><a href="https://blog.csdn.net/xc_zhou/article/details/80952155" target="_blank" rel="noopener">Python运行js代码</a></li>
+<li><a href="https://www.cnblogs.com/xiao-apple36/p/8744408.html" target="_blank" rel="noopener">python加密与解密（大致介绍了加密解密算法）-博客园</a></li>
+<li><a href="https://www.jianshu.com/p/4ba20afacce2" target="_blank" rel="noopener">常见加密方式与python实现-简书</a></li>
+<li><a href="https://www.pycryptodome.org/en/latest/src/cipher/cipher.html#" target="_blank" rel="noopener">PyCryptodome库的官方文档</a></li>
+<li><a href="https://www.runoob.com/python/att-string-encode.html" target="_blank" rel="noopener">python encode方法-菜鸟教程</a></li>
+</ul>
+<hr>
+<p><a href="https://github.com/HaneChiri/CHD_portal_login/blob/master/portal_login/encrypt.py" target="_blank" rel="noopener">本文代码的github链接</a></p>
+<hr>
+<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>登录之后查看原本提交表单的部分可以发现，密码由明文传输改成密文传输了。于是原本只需要POST账号和密码的明文就行，现在需要多经过一步——加密。</p>
+<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190718144535.png" alt=""></p>
+<p>起码咱们学校还是有考虑安全问题嘛！OVO</p>
+<h1 id="分析加密过程"><a href="#分析加密过程" class="headerlink" title="分析加密过程"></a>分析加密过程</h1><p>因为登录到主页的时候已经是加密好的密码，所以加密工作应该是在登录页面就进行的。</p>
+<p>所以回到<a href="http://ids.chd.edu.cn/authserver/login?service=http://portal.chd.edu.cn/index.portal" target="_blank" rel="noopener">登录页面</a>刷新一下，筛选javascript文件（因为js文件是用于动作的）</p>
+<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190718160057.png" alt=""></p>
+<p>在这几个js文件中找找有没有线索，然后在其中一个js文件中找到了一个密码加密函数。</p>
+<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190718145319.png" alt=""></p>
+<h2 id="encryptPassword"><a href="#encryptPassword" class="headerlink" title="encryptPassword()"></a>encryptPassword()</h2><p>传入密码，返回加密后的密码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">encryptPassword</span>(<span class="params">pwd0</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">		<span class="keyword">var</span> pwd1 = encryptAES(pwd0,pwdDefaultEncryptSalt);</span><br><span class="line">		$(<span class="string">"#casLoginForm"</span>).find(<span class="string">"#passwordEncrypt"</span>).val(pwd1);</span><br><span class="line">	&#125;<span class="keyword">catch</span>(e)&#123;</span><br><span class="line">		$(<span class="string">"#casLoginForm"</span>).find(<span class="string">"#passwordEncrypt"</span>).val(pwd0);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>核心逻辑就一句。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pwd1 = encryptAES(pwd0,pwdDefaultEncryptSalt);</span><br></pre></td></tr></table></figure>
+<p><code>encryptPassword()</code>调用了一个名为<code>encryptAES()</code>的函数，参数<code>pwd0</code>可能是未加密的密码，<code>pwdDefaultEncryptSalt</code>可能是加密用的密钥。try-catch不用说了，就是错误处理。</p>
+<p>encrypt是加密的意思，而AES是一种加密的方式。</p>
+<p>而刚刚的js文件里面有一个文件就带着encrypt这个单词，点进去看，找到了下一个函数：</p>
+<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190718145605.png" alt=""></p>
+<h2 id="encryptAES"><a href="#encryptAES" class="headerlink" title="encryptAES()"></a>encryptAES()</h2><p>传入密码明文和AES密钥，返回密文。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">encryptAES</span>(<span class="params">data,aesKey</span>)</span>&#123; <span class="comment">//加密</span></span><br><span class="line">	<span class="keyword">if</span>(!aesKey)&#123;</span><br><span class="line">		<span class="keyword">return</span> data;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> encrypted =getAesString(randomString(<span class="number">64</span>)+data,aesKey,randomString(<span class="number">16</span>)); <span class="comment">//密文</span></span><br><span class="line">	<span class="keyword">return</span> encrypted;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码逻辑：</p>
+<ul>
+<li>如果没有给出密钥，那么就不加密直接返回明文；</li>
+<li>如果给出了密钥，那么就调用<code>getAesString()</code>函数来获取密文</li>
+<li>返回密文</li>
+</ul>
+<p>其中<code>randomString()</code>函数代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> $aes_chars = <span class="string">'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'</span>;</span><br><span class="line"><span class="keyword">var</span> aes_chars_len = $aes_chars.length;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">randomString</span>(<span class="params">len</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> retStr = <span class="string">''</span>;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">		retStr += $aes_chars.charAt(<span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * aes_chars_len));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> retStr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上图可以看到，<code>getAesString()</code>就在这个函数上方。</p>
+<h2 id="getAesString"><a href="#getAesString" class="headerlink" title="getAesString()"></a>getAesString()</h2><p>传入明文、密钥、偏移量，返回密文。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//AES-128-CBC加密模式，key需要为16位，key和iv可以一样</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getAesString</span>(<span class="params">data,key0,iv0</span>)</span>&#123;<span class="comment">//加密</span></span><br><span class="line">	key0=key0.replace(<span class="regexp">/(^\s+)|(\s+$)/g</span>, <span class="string">""</span>);<span class="comment">//去除开头和结尾的空白</span></span><br><span class="line">	<span class="keyword">var</span> key  = CryptoJS.enc.Utf8.parse(key0);</span><br><span class="line">	<span class="keyword">var</span> iv   = CryptoJS.enc.Utf8.parse(iv0);</span><br><span class="line">	<span class="keyword">var</span> encrypted =CryptoJS.AES.encrypt(data,key,</span><br><span class="line">		&#123;</span><br><span class="line">			iv:iv,</span><br><span class="line">			mode:CryptoJS.mode.CBC,</span><br><span class="line">			padding:CryptoJS.pad.Pkcs7</span><br><span class="line">		&#125;);</span><br><span class="line">	<span class="keyword">return</span> encrypted.toString();    <span class="comment">//返回的是base64格式的密文</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个函数中调用了aes加密算法的函数来加密</p>
+<h2 id="密钥"><a href="#密钥" class="headerlink" title="密钥"></a>密钥</h2><p>还差密钥<code>pwdDefaultEncryptSalt</code>，去js文件里面搜索：</p>
+<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190718145810.png" alt=""></p>
+<p>图中可以看到，密钥的来源是<code>pwdEncryptArr[1]</code>变量，但是在js文件里面却找不到这个从哪里来的了。</p>
+<p>不过去搜索登录页面源代码的时候发现它就写在页面里面。</p>
+<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190718145859.png" alt=""></p>
+<p>得到了密钥：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pwdDefaultEncryptSalt = <span class="string">"QgkxfHXdbwRHcvDI"</span>;</span><br></pre></td></tr></table></figure></p>
+<p>后来发现，这个密钥同样每次都会变化，可以在获取表单变化的隐藏域值的时候顺便获取了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>信息门户加密算法是：AES-128-CBC加密模式，key需要为16位，key和iv可以一样（从注释里面得到的）</p>
+<ul>
+<li>密文data是长度为64的随机字符串与登录密码连接。</li>
+<li>密钥key就放在登录页面源码内，每次都会变化，需要动态获取。</li>
+<li>偏移量iv是长度为16的随机字符串。</li>
+</ul>
+<p>现在知道了它的加密算法以及密钥，我们在模拟登录的时候把我们的密码用同样的方式加密，向以前那样发送就可以登录了。</p>
+<p>有两种解决方案：</p>
+<ol>
+<li>直接在python里面运行复制来的js代码。参考：<a href="https://blog.csdn.net/xc_zhou/article/details/80952155" target="_blank" rel="noopener">Python运行js代码</a></li>
+<li>使用python进行加密</li>
+</ol>
+<h1 id="加密python代码实现"><a href="#加密python代码实现" class="headerlink" title="加密python代码实现"></a>加密python代码实现</h1><h2 id="AES简介"><a href="#AES简介" class="headerlink" title="AES简介"></a>AES简介</h2><p>AES（Advanced Encryption Standard）（高级加密标准），用于代替原本的DES（Data Encryption Standard）</p>
+<blockquote>
+<p>2006年，高级加密标准已然成为<a href="https://baike.sogou.com/lemma/ShowInnerLink.htm?lemmaId=72260379&amp;ss_c=ssc.citiao.link" target="_blank" rel="noopener">对称密钥</a>加密中最流行的算法之一。——搜狗百科</p>
+</blockquote>
+<p>AES算法将明文分为长度相等的若干组，每次加密一组数据。</p>
+<p>分组长度固定为128位（16字节），密钥长度则可以是128，192或256比特（16、24和32字节）。</p>
+<p>我遇到的加密问题需要的是128位的密钥。</p>
+<h2 id="PyCryptodome库"><a href="#PyCryptodome库" class="headerlink" title="PyCryptodome库"></a>PyCryptodome库</h2><p>这个库是PyCrypto库（已经停止更新）的延续。</p>
+<p><a href="https://www.pycryptodome.org/en/latest/src/cipher/cipher.html#" target="_blank" rel="noopener">PyCryptodome库的官方文档</a></p>
+<p>安装方式（windows）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pycryptodomex</span><br></pre></td></tr></table></figure>
+<p>导入方式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Cryptodome</span><br></pre></td></tr></table></figure>
+<h2 id="获取密钥"><a href="#获取密钥" class="headerlink" title="获取密钥"></a>获取密钥</h2><p>在页面源码里面密钥的格式是：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pwdDefaultEncryptSalt = <span class="string">"QgkxfHXdbwRHcvDI"</span>;</span><br></pre></td></tr></table></figure>
+<p>使用正则表达式来解析：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_encrypt_salt</span><span class="params">(login_url)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    获取密钥</span></span><br><span class="line"><span class="string">    :param login_url:登录页面的url</span></span><br><span class="line"><span class="string">    :return: (密钥,密钥对应的cookies)</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    response=requests.get(login_url)</span><br><span class="line">    pattern = re.compile(<span class="string">'var\s*?pwdDefaultEncryptSalt\s*?=\s*?"(.*?)"'</span>)</span><br><span class="line">    pwdDefaultEncryptSalt = pattern.findall(response.text)[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">return</span> (pwdDefaultEncryptSalt,response.cookies)</span><br></pre></td></tr></table></figure>
+<h2 id="获取初始化向量"><a href="#获取初始化向量" class="headerlink" title="获取初始化向量"></a>获取初始化向量</h2><p>iv是初始化向量，也称作偏移量。</p>
+<p>在上面的分析中，传给加密函数的iv是一个随机字符串：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> encrypted =getAesString(randomString(<span class="number">64</span>)+data,aesKey,randomString(<span class="number">16</span>)); <span class="comment">//密文</span></span><br></pre></td></tr></table></figure>
+<p>现在用python来实现这个<code>randomString()</code></p>
+<h3 id="randomString-的python实现"><a href="#randomString-的python实现" class="headerlink" title="randomString()的python实现"></a>randomString()的python实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_string</span><span class="params">(length)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    获取随机字符串</span></span><br><span class="line"><span class="string">    :param length:随机字符串长度</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    ret_string=<span class="string">''</span></span><br><span class="line">    aes_chars = <span class="string">'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(length):</span><br><span class="line">        ret_string+=random.choice(aes_chars)</span><br><span class="line">    <span class="keyword">return</span> ret_string</span><br></pre></td></tr></table></figure>
+<p>那一串用于随机的字符串是我从js文件的注释里面复制下来的，这个串并没有覆盖全部的字母和数字，为了防止意外，直接使用它的。</p>
+<h2 id="getAesString-的python实现"><a href="#getAesString-的python实现" class="headerlink" title="getAesString()的python实现"></a>getAesString()的python实现</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Cryptodome.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">from</span> Cryptodome.Util.Padding <span class="keyword">import</span> pad<span class="comment">#用于对齐</span></span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_aes_string</span><span class="params">(data,key,iv)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    用AES-CBC方式加密字符串</span></span><br><span class="line"><span class="string">    :param data: 需要加密的字符串</span></span><br><span class="line"><span class="string">    :param key: 密钥</span></span><br><span class="line"><span class="string">    :param iv: 偏移量</span></span><br><span class="line"><span class="string">    :return: base64格式的加密字符串</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    <span class="comment">#预处理字符串</span></span><br><span class="line">    data=str.encode(data)</span><br><span class="line">    data=pad(data, AES.block_size)<span class="comment">#将明文对齐</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#预处理密钥和偏移量</span></span><br><span class="line">    key=str.encode(key)</span><br><span class="line">    iv=str.encode(iv)</span><br><span class="line"></span><br><span class="line">    cipher = AES.new(key, AES.MODE_CBC, iv)<span class="comment">#初始化加密器</span></span><br><span class="line">    cipher_text=cipher.encrypt(data)<span class="comment">#加密</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#返回的是base64格式的密文</span></span><br><span class="line">    cipher_b64=str(base64.b64encode(cipher_text), encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">    <span class="keyword">return</span> cipher_b64</span><br></pre></td></tr></table></figure>
+<h3 id="对齐"><a href="#对齐" class="headerlink" title="对齐"></a>对齐</h3><p>首先，先将明文对齐，因为AES加密是分组加密，所以明文的长度需要是组长度的倍数。</p>
+<p>有两种方式</p>
+<ol>
+<li><code>Cryptodome.Util.Padding</code>中的pad函数就可以实现对齐，就是我采用的办法。</li>
+<li><a href="https://github.com/hfldqwe/encrypt/blob/master/encrypt/aes_cbc.py" target="_blank" rel="noopener">组长雁横的代码</a>是这样实现对齐的：</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_to_16</span><span class="params">(value)</span>:</span></span><br><span class="line">    <span class="keyword">while</span> len(value) % <span class="number">16</span> != <span class="number">0</span>:</span><br><span class="line">        value += <span class="string">'\0'</span></span><br><span class="line">    <span class="keyword">return</span> str.encode(value)  <span class="comment"># 返回bytes</span></span><br></pre></td></tr></table></figure>
+<h3 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h3><p>js代码里面在加密之前，对数据做了编码处理：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> key  = CryptoJS.enc.Utf8.parse(key0);</span><br><span class="line"><span class="keyword">var</span> iv   = CryptoJS.enc.Utf8.parse(iv0);</span><br></pre></td></tr></table></figure>
+<p>因此也顺便处理一下。</p>
+<p><a href="https://www.runoob.com/python/att-string-encode.html" target="_blank" rel="noopener">python encode方法</a></p>
+<blockquote>
+<h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>Python encode() 方法以 <em>encoding</em> 指定的编码格式编码字符串。errors参数可以指定不同的错误处理方案。</p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p>encode()方法语法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; str.encode(encoding=<span class="string">'UTF-8'</span>,errors=<span class="string">'strict'</span>)</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="encryptAES-的python实现"><a href="#encryptAES-的python实现" class="headerlink" title="encryptAES()的python实现"></a>encryptAES()的python实现</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encrypt_aes</span><span class="params">(data,key=None)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    进行AES加密</span></span><br><span class="line"><span class="string">    :param data: 需要加密的字符串</span></span><br><span class="line"><span class="string">    :param key: 密钥</span></span><br><span class="line"><span class="string">    :return: 如果key存在，则返回密文，否则返回明文</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">not</span> key):</span><br><span class="line">        <span class="keyword">return</span> data</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        data=random_string(<span class="number">64</span>)+data</span><br><span class="line">        iv=random_string(<span class="number">16</span>)<span class="comment">#偏移量</span></span><br><span class="line">        encrypted =get_aes_string(data,key,iv)</span><br><span class="line">        <span class="keyword">return</span> encrypted</span><br></pre></td></tr></table></figure>
+<h2 id="encryptPassword-的python实现"><a href="#encryptPassword-的python实现" class="headerlink" title="encryptPassword()的python实现"></a>encryptPassword()的python实现</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encrypt_password</span><span class="params">(password,login_url)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    加密密码</span></span><br><span class="line"><span class="string">    :param password: 需要加密的密码</span></span><br><span class="line"><span class="string">    :param login_url:登录页面的url</span></span><br><span class="line"><span class="string">    :return: (加密后的密码,对应的cookies)</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    key,cookies=get_encrypt_salt(login_url)</span><br><span class="line">    password.strip()<span class="comment">#去除头尾空格</span></span><br><span class="line">    encrypted=encrypt_aes(password,key)</span><br><span class="line">    <span class="keyword">return</span> (encrypted,cookies)</span><br></pre></td></tr></table></figure>
+<p>这就完成了</p>
+<h1 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    login_url=<span class="string">'http://ids.chd.edu.cn/authserver/login?service=http%3A%2F%2Fportal.chd.edu.cn%2F'</span></span><br><span class="line"></span><br><span class="line">    password=input(<span class="string">'password:'</span>)</span><br><span class="line">    password,cookies=encrypt_password(password,login_url)</span><br><span class="line">    print(<span class="string">'encrypted password:'</span>,password)</span><br></pre></td></tr></table></figure>
+<h1 id="有效性检验"><a href="#有效性检验" class="headerlink" title="有效性检验"></a>有效性检验</h1><p>可以使用浏览器开发者工具的控制台，调用js函数，传入同样的参数，看是否得到相同的结果。</p>
+<p>测试结果如图：</p>
+<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/QQ%E5%9B%BE%E7%89%8720190718160740.png" alt=""><br><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/QQ%E5%9B%BE%E7%89%8720190718160734.png" alt=""></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/spider/" rel="tag"># spider</a>
+          
+            <a href="/tags/package/" rel="tag"># package</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/python_read_ini_No_section/" rel="next" title="python读取ini文件失败的原因">
+                <i class="fa fa-chevron-left"></i> python读取ini文件失败的原因
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="憧憬少">
+            
+              <p class="site-author-name" itemprop="name">憧憬少</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/HaneChiri" title="GitHub &rarr; https://github.com/HaneChiri" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://space.bilibili.com/13290087" title="Bilibili &rarr; https://space.bilibili.com/13290087" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>Bilibili</a>
+                </span>
+              
+            </div>
+          
+		  
+		  
+		  
+		  
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tianruishi.github.io" title="https://tianruishi.github.io" rel="noopener" target="_blank">空白</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://zzdoreen.github.io/dist/index" title="https://zzdoreen.github.io/dist/index" rel="noopener" target="_blank">曾智</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://lollipopnougat.github.io/Crepeblog/" title="https://lollipopnougat.github.io/Crepeblog/" rel="noopener" target="_blank">封掣</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.cnblogs.com/1625--H/" title="https://www.cnblogs.com/1625--H/" rel="noopener" target="_blank">暮冥</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jxyzxy.github.io/" title="https://jxyzxy.github.io/" rel="noopener" target="_blank">晓宇</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#参考链接"><span class="nav-text">参考链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问题描述"><span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析加密过程"><span class="nav-text">分析加密过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#encryptPassword"><span class="nav-text">encryptPassword()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#encryptAES"><span class="nav-text">encryptAES()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getAesString"><span class="nav-text">getAesString()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#密钥"><span class="nav-text">密钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#加密python代码实现"><span class="nav-text">加密python代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AES简介"><span class="nav-text">AES简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PyCryptodome库"><span class="nav-text">PyCryptodome库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取密钥"><span class="nav-text">获取密钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取初始化向量"><span class="nav-text">获取初始化向量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#randomString-的python实现"><span class="nav-text">randomString()的python实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getAesString-的python实现"><span class="nav-text">getAesString()的python实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对齐"><span class="nav-text">对齐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预处理"><span class="nav-text">预处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#描述"><span class="nav-text">描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语法"><span class="nav-text">语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#encryptAES-的python实现"><span class="nav-text">encryptAES()的python实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#encryptPassword-的python实现"><span class="nav-text">encryptPassword()的python实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#测试代码"><span class="nav-text">测试代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#有效性检验"><span class="nav-text">有效性检验</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">憧憬少</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+  <div style="display: none;">
+    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1276110171'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s96.cnzz.com/z_stat.php%3Fid%3D1276110171%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+  </div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+  
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'D6yAkWdfKpiymkjB7yLOBmtu-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'D6yAkWdfKpiymkjB7yLOBmtu-gzGzoHsz',
+                'X-LC-Key': 'voaLXamEykorKePTABBVxnmH',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":100,"height":200},"mobile":{"show":false}});</script></body>
+</html>
