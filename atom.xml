@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>尘世未解</title>
+  
+  <subtitle>过去不可追，未来尚可为</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://hanechiri.github.io/"/>
+  <updated>2019-07-20T04:25:20.850Z</updated>
+  <id>https://hanechiri.github.io/</id>
+  
+  <author>
+    <name>憧憬少</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>学校信息门户模拟登录</title>
+    <link href="https://hanechiri.github.io/post/portal_login/"/>
+    <id>https://hanechiri.github.io/post/portal_login/</id>
+    <published>2019-07-20T03:21:16.000Z</published>
+    <updated>2019-07-20T04:25:20.850Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;将登陆学校信息门户的部分专门封装成一个模块，需要的时候导入。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="项目总结" scheme="https://hanechiri.github.io/categories/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/"/>
+    
+    
+      <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
+    
+      <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>学校信息门户模拟登录之密码加密</title>
+    <link href="https://hanechiri.github.io/post/portal_login_encrypt/"/>
+    <id>https://hanechiri.github.io/post/portal_login_encrypt/</id>
+    <published>2019-07-18T06:31:10.000Z</published>
+    <updated>2019-07-18T08:11:18.034Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;以前写的爬虫无法登录到学校的信息门户上去了，因为门户的新JS代码将表单的密码先加密了一次，再将其与别的表单数据POST过去。使用的是AES加密的CBC模式。&lt;/p&gt;
+&lt;p&gt;本文前半部分是我的python组长&lt;strong&gt;雁横&lt;/strong&gt;给组员们讲解的信息门户的密码加密思路，然后由我总结成文，后半部分是我自己写的加密代码实现，使用python的&lt;code&gt;PyCryptodome&lt;/code&gt;库来进行加密。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="项目总结" scheme="https://hanechiri.github.io/categories/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/"/>
+    
+    
+      <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
+    
+      <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
+    
+      <category term="package" scheme="https://hanechiri.github.io/tags/package/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python读取ini文件失败的原因</title>
+    <link href="https://hanechiri.github.io/post/python_read_ini_No_section/"/>
+    <id>https://hanechiri.github.io/post/python_read_ini_No_section/</id>
+    <published>2019-07-09T10:06:50.000Z</published>
+    <updated>2019-07-09T10:40:26.929Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;尝试使用python的&lt;code&gt;configparser&lt;/code&gt;来读取&lt;code&gt;ini&lt;/code&gt;配置文件，但是遇到了&lt;code&gt;No Section&lt;/code&gt;的错误。&lt;/p&gt;
+&lt;p&gt;最终发现其实是路径出了问题。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="过程记录" scheme="https://hanechiri.github.io/categories/%E8%BF%87%E7%A8%8B%E8%AE%B0%E5%BD%95/"/>
+    
+    
+      <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>excel实现周总结签到积分制</title>
+    <link href="https://hanechiri.github.io/post/excel_weekly_sign/"/>
+    <id>https://hanechiri.github.io/post/excel_weekly_sign/</id>
+    <published>2019-07-01T08:14:35.000Z</published>
+    <updated>2019-07-01T08:57:31.937Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;我在自己一个学习群里设定了一个周总结制度，这篇博客记录一下如何使用excel函数来实现计算打卡相册的积分。&lt;strong&gt;这里其实我用的是wps表格，但是函数一样，所以我就分类在excel里面。&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="工具使用" scheme="https://hanechiri.github.io/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"/>
+    
+    
+      <category term="excel" scheme="https://hanechiri.github.io/tags/excel/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>excel实现打卡相册积分制</title>
+    <link href="https://hanechiri.github.io/post/excel_clock_in_album/"/>
+    <id>https://hanechiri.github.io/post/excel_clock_in_album/</id>
+    <published>2019-07-01T06:37:02.000Z</published>
+    <updated>2019-07-01T10:18:22.076Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;我在自己一个学习群里设定了一个打卡相册制度，这篇博客记录一下如何使用sumif函数来实现计算打卡相册的积分。&lt;strong&gt;这里其实我用的是wps表格，但是函数一样，所以我就分类在excel里面。&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="工具使用" scheme="https://hanechiri.github.io/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"/>
+    
+    
+      <category term="excel" scheme="https://hanechiri.github.io/tags/excel/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>WIN10共享文件夹</title>
+    <link href="https://hanechiri.github.io/post/win10_share_folder/"/>
+    <id>https://hanechiri.github.io/post/win10_share_folder/</id>
+    <published>2019-06-30T10:14:39.000Z</published>
+    <updated>2019-06-30T10:41:30.339Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这是我以前写的第一篇博客的补档，由于图片太多于是就发在了CSDN，现在不愁图片的问题了，于是就在整理电脑文件时把这篇博客在个人博客这边发一下。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="工具使用" scheme="https://hanechiri.github.io/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"/>
+    
+    
+      <category term="windows" scheme="https://hanechiri.github.io/tags/windows/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>一个好用的图床管理工具PicGo</title>
+    <link href="https://hanechiri.github.io/post/PicGo_imgur/"/>
+    <id>https://hanechiri.github.io/post/PicGo_imgur/</id>
+    <published>2019-06-28T03:34:59.000Z</published>
+    <updated>2019-06-28T04:01:48.719Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;先前给hexo博客插图片都是把图片commit到github上再手动构造链接，比较麻烦，又不想把图片直接放在博客所在的库。&lt;/p&gt;
+&lt;p&gt;这次找到了一个好东西：&lt;a href=&quot;https://github.com/Molunerfinn/PicGo&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;PicGo&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="工具使用" scheme="https://hanechiri.github.io/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"/>
+    
+    
+      <category term="hexo" scheme="https://hanechiri.github.io/tags/hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python相对路径是相对于哪里</title>
+    <link href="https://hanechiri.github.io/post/python_relative_path/"/>
+    <id>https://hanechiri.github.io/post/python_relative_path/</id>
+    <published>2019-06-27T07:52:52.000Z</published>
+    <updated>2019-07-15T10:33:25.402Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在学习scrapy时，保存数据到文件的时候，发现一直出现“找不到这样的文件或文件夹”的错误，最后发现是因为python的相对路径。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程语言" scheme="https://hanechiri.github.io/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+    
+    
+      <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
+    
+      <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
+    
+      <category term="scrapy" scheme="https://hanechiri.github.io/tags/scrapy/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>调整博客分类</title>
+    <link href="https://hanechiri.github.io/post/adjust_categories/"/>
+    <id>https://hanechiri.github.io/post/adjust_categories/</id>
+    <published>2019-06-26T14:10:23.000Z</published>
+    <updated>2019-07-01T06:42:56.062Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;目前个人博客内的分类不太合理，于是重新调整分类&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="过程记录" scheme="https://hanechiri.github.io/categories/%E8%BF%87%E7%A8%8B%E8%AE%B0%E5%BD%95/"/>
+    
+    
+      <category term="hexo" scheme="https://hanechiri.github.io/tags/hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>hexo日记本</title>
+    <link href="https://hanechiri.github.io/post/hexo_diary/"/>
+    <id>https://hanechiri.github.io/post/hexo_diary/</id>
+    <published>2019-06-26T02:39:06.000Z</published>
+    <updated>2019-06-26T15:00:27.801Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;打算从纸质日记转到电子日记。&lt;/p&gt;
+&lt;p&gt;之前是一个月的日记放在一个markdown文件里面，每天一个一级标题。昨天突发奇想，为啥不用Hexo来搭建日记本呢？它本来就是用来写博客（blog网络日志）的呀。&lt;/p&gt;
+&lt;p&gt;于是今天就来搭建hexo日记本&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="过程记录" scheme="https://hanechiri.github.io/categories/%E8%BF%87%E7%A8%8B%E8%AE%B0%E5%BD%95/"/>
+    
+    
+      <category term="hexo" scheme="https://hanechiri.github.io/tags/hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>练习利用Scrapy爬取b站排行榜</title>
+    <link href="https://hanechiri.github.io/post/Scrapy_spider_bilibiliRank/"/>
+    <id>https://hanechiri.github.io/post/Scrapy_spider_bilibiliRank/</id>
+    <published>2019-06-25T09:32:32.000Z</published>
+    <updated>2019-07-15T10:32:33.866Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;开始学python的Scrapy框架了，参考书是崔庆才的《python3网络爬虫开发实战》&lt;/p&gt;
+&lt;p&gt;跟着示例敲完之后，又试着按照一样的逻辑去爬取了B站排行榜的数据。&lt;/p&gt;
+&lt;p&gt;通过这个小项目学习使用Scrapy框架。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="工具使用" scheme="https://hanechiri.github.io/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"/>
+    
+    
+      <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
+    
+      <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
+    
+      <category term="scrapy" scheme="https://hanechiri.github.io/tags/scrapy/"/>
+    
+      <category term="framework" scheme="https://hanechiri.github.io/tags/framework/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>java基于AWT的对战小游戏</title>
+    <link href="https://hanechiri.github.io/post/java_game_FightFieldFrame/"/>
+    <id>https://hanechiri.github.io/post/java_game_FightFieldFrame/</id>
+    <published>2019-06-13T12:39:29.000Z</published>
+    <updated>2019-06-26T14:56:06.747Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这学期的java课设弄完了，写个博客总结一下。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.bilibili.com/video/av54526303/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;哔哩哔哩对应视频的传送门&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="项目总结" scheme="https://hanechiri.github.io/categories/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/"/>
+    
+    
+      <category term="java" scheme="https://hanechiri.github.io/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python爬虫学习笔记5爬虫类结构优化</title>
+    <link href="https://hanechiri.github.io/post/python_spider_note5optimization_of_the_spider_class/"/>
+    <id>https://hanechiri.github.io/post/python_spider_note5optimization_of_the_spider_class/</id>
+    <published>2019-04-21T04:44:01.000Z</published>
+    <updated>2019-07-15T10:33:13.970Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;打算全部以cookie来登陆，而不依赖于session（因为听组长说session没cookie快，而且我想学些新东西而不是翻来覆去地在舒适区鼓捣）。弄了几天终于弄出来个代码不那么混乱的爬虫类了，更新一下博文来总结一下。代码在我github的spider库里面。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="项目总结" scheme="https://hanechiri.github.io/categories/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/"/>
+    
+    
+      <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
+    
+      <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python爬虫学习笔记4模拟登录函数的优化</title>
+    <link href="https://hanechiri.github.io/post/python_spider_note4optimization_of_the_login_function/"/>
+    <id>https://hanechiri.github.io/post/python_spider_note4optimization_of_the_login_function/</id>
+    <published>2019-04-12T14:21:05.000Z</published>
+    <updated>2019-07-15T10:33:08.995Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;前面写的代码虽然完成了爬取的功能，但是过于凌乱，于是打算重构一遍。首先从登陆开始&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="项目总结" scheme="https://hanechiri.github.io/categories/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/"/>
+    
+    
+      <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
+    
+      <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>git恢复误提交的内容</title>
+    <link href="https://hanechiri.github.io/post/git_reset_incorrect_commit/"/>
+    <id>https://hanechiri.github.io/post/git_reset_incorrect_commit/</id>
+    <published>2019-04-11T11:31:01.000Z</published>
+    <updated>2019-06-26T15:00:49.030Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在图书馆敲下最后几行代码，然后就着手机热点把爬虫代码push上去之后，突然想起来，我好像忘了把账号密码部分改成手动输入，现在push上去的是明文啊！掀桌！早知道就回宿舍上传了，说不准还能想起来。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="过程记录" scheme="https://hanechiri.github.io/categories/%E8%BF%87%E7%A8%8B%E8%AE%B0%E5%BD%95/"/>
+    
+    
+      <category term="git" scheme="https://hanechiri.github.io/tags/git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>手工归档编程项目</title>
+    <link href="https://hanechiri.github.io/post/archive_project/"/>
+    <id>https://hanechiri.github.io/post/archive_project/</id>
+    <published>2019-04-07T08:34:09.000Z</published>
+    <updated>2019-06-26T14:53:50.211Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;以前写代码建立的工程到处堆放，导致不能很好的找到以前的代码。虽然以前简单地划分了一下文件夹，但并没有投入太多精力去想如何分类。所以打算养成归档编程项目的好习惯，记录一下过程。也给读者们一个参考。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="过程记录" scheme="https://hanechiri.github.io/categories/%E8%BF%87%E7%A8%8B%E8%AE%B0%E5%BD%95/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>简易倒排索引</title>
+    <link href="https://hanechiri.github.io/post/simple_inverted_index/"/>
+    <id>https://hanechiri.github.io/post/simple_inverted_index/</id>
+    <published>2019-03-29T16:11:12.000Z</published>
+    <updated>2019-06-28T03:22:23.653Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;智能信息检索这门课程有个上机作业，题目是“实现倒排索引”。&lt;/p&gt;
+&lt;p&gt;用到了以前没有学的STL中的vector。&lt;/p&gt;
+&lt;p&gt;经过两次课上写代码（3小时）加上课后修bug的时间（晚上十点到十二点）总共5个小时，终于完成了一个简易的倒排索引。因为十点时已经太困，喝了柠檬茶提神结果现在睡不着，所以继续熬夜把博客写完吧。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="项目总结" scheme="https://hanechiri.github.io/categories/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/"/>
+    
+    
+      <category term="c++" scheme="https://hanechiri.github.io/tags/c/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>老鼠和毒药问题</title>
+    <link href="https://hanechiri.github.io/post/rats_and_poison/"/>
+    <id>https://hanechiri.github.io/post/rats_and_poison/</id>
+    <published>2019-03-19T00:39:42.000Z</published>
+    <updated>2019-06-26T14:51:55.917Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;昨天在上完课回宿舍的路上，楠哥提起了一道他在某个基础知识竞赛上遇到的题目，我觉得解法很巧妙，分享记录一下。&lt;/p&gt;
+&lt;h1 id=&quot;题目&quot;&gt;&lt;a href=&quot;#题目&quot; class=&quot;headerlink&quot; title=&quot;题目&quot;&gt;&lt;/a&gt;题目&lt;/h1&gt;&lt;p&gt;有1024瓶水，其中一瓶有毒，你有10只老鼠用于试毒（这里是题目假设，所以别下不了手让老鼠试毒OVO），老鼠如果喝到毒药，会在一星期后死亡。你有一周时间，如何找出这一瓶毒药？&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="算法模型" scheme="https://hanechiri.github.io/categories/%E7%AE%97%E6%B3%95%E6%A8%A1%E5%9E%8B/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>python爬虫学习笔记3封装爬虫类</title>
+    <link href="https://hanechiri.github.io/post/python_spider_note3class_spider/"/>
+    <id>https://hanechiri.github.io/post/python_spider_note3class_spider/</id>
+    <published>2019-03-15T11:00:56.000Z</published>
+    <updated>2019-07-15T10:33:03.214Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在完成了基本的爬取任务之后，接到了将其封装为一个爬虫类的任务&lt;/p&gt;
+&lt;p&gt;传送门：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://hanechiri.github.io/post/python_spider_note1simple_spider/#more&quot;&gt;python爬虫学习笔记1一个简单的爬虫&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://hanechiri.github.io/post/python_spider_note2login_and_database/#more&quot;&gt;python爬虫学习笔记2模拟登录与数据库&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="项目总结" scheme="https://hanechiri.github.io/categories/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/"/>
+    
+    
+      <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
+    
+      <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python爬虫学习笔记2模拟登录与数据库</title>
+    <link href="https://hanechiri.github.io/post/python_spider_note2login_and_database/"/>
+    <id>https://hanechiri.github.io/post/python_spider_note2login_and_database/</id>
+    <published>2019-03-09T05:30:43.000Z</published>
+    <updated>2019-07-15T10:32:52.933Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;为了加入学校里面一个技术小组，我接受了写一个爬取学校网站通知公告的任务。这个任务比以前写的爬虫更难的地方在于，需要模拟登录才能获得页面，以及将得到的数据存入数据库。&lt;/p&gt;
+&lt;p&gt;本文按照日期来记录我完成任务的过程，然后再整理一遍全部代码。读者可以通过侧栏目录跳转阅读。不介绍库的安装。&lt;/p&gt;
+&lt;p&gt;传送门：&lt;a href=&quot;https://hanechiri.github.io/post/python_spider_note1simple_spider/#more&quot;&gt;爬虫学习笔记1&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="项目总结" scheme="https://hanechiri.github.io/categories/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/"/>
+    
+    
+      <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
+    
+      <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
+    
+      <category term="mysql" scheme="https://hanechiri.github.io/tags/mysql/"/>
+    
+  </entry>
+  
+</feed>
