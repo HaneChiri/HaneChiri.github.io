@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hanechiri.github.io/"/>
-  <updated>2019-08-06T13:05:34.930Z</updated>
+  <updated>2019-08-07T07:02:19.121Z</updated>
   <id>https://hanechiri.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>爬取微信公众号文章1获取文章链接</title>
+    <link href="https://hanechiri.github.io/post/wechat_offical_account_spider_1_get_article_urls/"/>
+    <id>https://hanechiri.github.io/post/wechat_offical_account_spider_1_get_article_urls/</id>
+    <published>2019-08-07T06:18:08.000Z</published>
+    <updated>2019-08-07T07:02:19.121Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;爬取微信公众号的文章，之前一直觉得应该很难，我搞不定，但是尝试了一下发现，其实这和之前爬取的网站没有太大的区别。&lt;/p&gt;
+&lt;p&gt;本文记录了2019年8月7日爬取某一特定微信公众号的所有文章链接的方式，读者请注意时效性。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="过程记录" scheme="https://hanechiri.github.io/categories/%E8%BF%87%E7%A8%8B%E8%AE%B0%E5%BD%95/"/>
+    
+    
+      <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
+    
+      <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
+    
+      <category term="ajax" scheme="https://hanechiri.github.io/tags/ajax/"/>
+    
+  </entry>
   
   <entry>
     <title>简易密码生成器</title>
@@ -421,35 +446,6 @@
     
       <category term="算法模型" scheme="https://hanechiri.github.io/categories/%E7%AE%97%E6%B3%95%E6%A8%A1%E5%9E%8B/"/>
     
-    
-  </entry>
-  
-  <entry>
-    <title>python爬虫学习笔记3封装爬虫类</title>
-    <link href="https://hanechiri.github.io/post/python_spider_note3class_spider/"/>
-    <id>https://hanechiri.github.io/post/python_spider_note3class_spider/</id>
-    <published>2019-03-15T11:00:56.000Z</published>
-    <updated>2019-07-15T10:33:03.214Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;在完成了基本的爬取任务之后，接到了将其封装为一个爬虫类的任务&lt;/p&gt;
-&lt;p&gt;传送门：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://hanechiri.github.io/post/python_spider_note1simple_spider/#more&quot;&gt;python爬虫学习笔记1一个简单的爬虫&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://hanechiri.github.io/post/python_spider_note2login_and_database/#more&quot;&gt;python爬虫学习笔记2模拟登录与数据库&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-      <category term="项目总结" scheme="https://hanechiri.github.io/categories/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/"/>
-    
-    
-      <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
-    
-      <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
     
   </entry>
   
