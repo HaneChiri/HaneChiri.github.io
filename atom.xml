@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hanechiri.github.io/"/>
-  <updated>2019-08-07T07:02:19.121Z</updated>
+  <updated>2019-08-11T07:38:10.234Z</updated>
   <id>https://hanechiri.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>爬取微信公众号文章2获取页面失败</title>
+    <link href="https://hanechiri.github.io/post/wechat_offical_account_spider_2_fail_to_get_html/"/>
+    <id>https://hanechiri.github.io/post/wechat_offical_account_spider_2_fail_to_get_html/</id>
+    <published>2019-08-11T07:19:58.000Z</published>
+    <updated>2019-08-11T07:38:10.234Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;虽然获取到了微信公众号文章的链接，但没法获取到包含文章内容的html。&lt;/p&gt;
+&lt;p&gt;花了一个小时来研究怎么获取页面，最后还是失败了。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="过程记录" scheme="https://hanechiri.github.io/categories/%E8%BF%87%E7%A8%8B%E8%AE%B0%E5%BD%95/"/>
+    
+    
+      <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
+    
+      <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
+    
+      <category term="selenium" scheme="https://hanechiri.github.io/tags/selenium/"/>
+    
+  </entry>
   
   <entry>
     <title>爬取微信公众号文章1获取文章链接</title>
@@ -427,25 +452,6 @@
     
     
       <category term="c++" scheme="https://hanechiri.github.io/tags/c/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>老鼠和毒药问题</title>
-    <link href="https://hanechiri.github.io/post/rats_and_poison/"/>
-    <id>https://hanechiri.github.io/post/rats_and_poison/</id>
-    <published>2019-03-19T00:39:42.000Z</published>
-    <updated>2019-06-26T14:51:55.917Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;昨天在上完课回宿舍的路上，楠哥提起了一道他在某个基础知识竞赛上遇到的题目，我觉得解法很巧妙，分享记录一下。&lt;/p&gt;
-&lt;h1 id=&quot;题目&quot;&gt;&lt;a href=&quot;#题目&quot; class=&quot;headerlink&quot; title=&quot;题目&quot;&gt;&lt;/a&gt;题目&lt;/h1&gt;&lt;p&gt;有1024瓶水，其中一瓶有毒，你有10只老鼠用于试毒（这里是题目假设，所以别下不了手让老鼠试毒OVO），老鼠如果喝到毒药，会在一星期后死亡。你有一周时间，如何找出这一瓶毒药？&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="算法模型" scheme="https://hanechiri.github.io/categories/%E7%AE%97%E6%B3%95%E6%A8%A1%E5%9E%8B/"/>
-    
     
   </entry>
   

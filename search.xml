@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[爬取微信公众号文章2获取页面失败]]></title>
+    <url>%2Fpost%2Fwechat_offical_account_spider_2_fail_to_get_html%2F</url>
+    <content type="text"><![CDATA[虽然获取到了微信公众号文章的链接，但没法获取到包含文章内容的html。 花了一个小时来研究怎么获取页面，最后还是失败了。 requests首先按照一般思路，使用requests库来获取页面，但是获取到的却是不含有文章内容的一堆js代码和css代码，以及少量的没有内容的html。 去查看Ajax请求，有4个请求，其中三个都是没有文章内容的json，而第一个请求也是最可疑的一个，无法预览。 第一个请求的接口： 1https://mp.weixin.qq.com/mp/appmsgreport?action=page_time&amp;__biz=MzAwNjA3Nzg0MA==&amp;uin=&amp;key=&amp;pass_ticket=&amp;wxtoken=777&amp;devicetype=&amp;clientversion=&amp;appmsg_token=&amp;x5=0&amp;f=json 这是以POST方式访问的接口，下面一大堆的Form data，这其中甚至还有文章的标题！ 也就是说在访问这个接口之前，就已经得知了文章的内容了吗？ selenium我觉得模拟请求太过于复杂，于是尝试使用selenium来获取。 但是得到的内容和上文说的一样，并没有什么不同。非常奇怪。加了60秒的延时让它充分渲染也没用，问题不在这里。]]></content>
+      <categories>
+        <category>过程记录</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>spider</tag>
+        <tag>selenium</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[爬取微信公众号文章1获取文章链接]]></title>
     <url>%2Fpost%2Fwechat_offical_account_spider_1_get_article_urls%2F</url>
     <content type="text"><![CDATA[爬取微信公众号的文章，之前一直觉得应该很难，我搞不定，但是尝试了一下发现，其实这和之前爬取的网站没有太大的区别。 本文记录了2019年8月7日爬取某一特定微信公众号的所有文章链接的方式，读者请注意时效性。 前言 需要一个可登录的微信公众号。本文采用的方法是使用微信公众号内部的搜索来搜索文章。 由于登录部分很复杂，我还没搞懂，本文直接手动获取cookies来登录。 参考链接记一次微信公众号爬虫的经历-CSDN 如何手动获取在登录后的微信公众平台的【素材管理】页面，点击【新建图文素材】，在新出现的编辑页面内，找到用于插入别的文章引用的，【超链接】图标。接着就会出现下图的窗口，输入需要获取的公众号查找即可。 分析打开F12开发者工具，搜索到公众号之后，查看Ajax请求 换页的时候会再次发出Ajax请求，多换几页，查看它们的参数的规律。 通过观察，知道了接口是： 1https://mp.weixin.qq.com/cgi-bin/appmsg 在访问这个接口时，需要在后面带上参数： 12345678910111213data = &#123; 'token':'271444813', #在同一次登录不变，在首页源代码里面可以获取 'lang':'zh_CN', # 不变 'f':'json',# 不变 'ajax':'1',# 不变 'random': str(random.random()),# 随机数 'action':'list_ex',# 不变 'begin':'0',# 代表页数，每翻一页就会+5，但是每一页的文章数不一定为5篇 'count':'5', # 应该是每一次获取的文章篇数 'query':'',# 不变 'fakeid':'MzAwNjA3Nzg0MA==',# 文章所在的公众号的id 'type':'9',# 不变&#125; 获取步骤 登录微信公众平台 手动在开发者工具中获取cookies字符串 带好参数访问Ajax接口，获取到所需要的json数据 示例代码12345678910111213141516171819202122232425262728293031323334353637383940414243import requestsimport randomdef cookiejar_from_str(cookies_str): ''' 将cookies字符串转换为cookiejar ''' cookies=dict([item.split('=',1) for item in cookies_str.split(';')]) print(cookies) cookies=requests.utils.cookiejar_from_dict(cookies) return cookiesif __name__ == '__main__': # cookies字符串 cookies_str='''openid2ticket_okSCe0vbk_v5067L-AuViT1wrkEg=ARU37unMfUwam3yNHXFcw5CMFvTHMvmBnjjS8A8= '''.strip() # 这里我手动截去了大部分cookies字符串，明白意思即可 # headers headers=&#123; 'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3722.400 QQBrowser/10.5.3738.400' &#125; cookies = cookiejar_from_str(cookies_str) data = &#123; 'token':'271444813', #在同一次登录不变，在首页源代码里面可以获取 'lang':'zh_CN', # 不变 'f':'json',# 不变 'ajax':'1',# 不变 'random': str(random.random()),# 随机数 'action':'list_ex',# 不变 'begin':'0',# 代表页数，每翻一页就会+5，但是每一页的文章数不一定为5篇 'count':'5', # 应该是每一次获取的文章篇数 'query':'',# 不变 'fakeid':'MzAwNjA3Nzg0MA==',# 文章所在的公众号的id 'type':'9',# 不变 &#125; url='https://mp.weixin.qq.com/cgi-bin/appmsg' response_json = requests.get(url, cookies=cookies,headers=headers, params=data).json() for item in response_json["app_msg_list"]: # 获取url print(item['link'])]]></content>
