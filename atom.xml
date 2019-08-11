@@ -42,6 +42,28 @@
   </entry>
   
   <entry>
+    <title>2019年年中总结</title>
+    <link href="https://hanechiri.github.io/post/2019_semi-annual_summary/"/>
+    <id>https://hanechiri.github.io/post/2019_semi-annual_summary/</id>
+    <published>2019-08-10T11:28:16.000Z</published>
+    <updated>2019-08-11T10:53:31.725Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;要一个人在家一周，有些孤独，有些茫然，想起来写总结。&lt;/p&gt;
+&lt;p&gt;不太清楚总结怎么写，就和以前一样，把过去的东西列出来看看吧，帮助自己回顾一番。&lt;/p&gt;
+&lt;p&gt;这是2019上半年的总结，也是大二第二学期的学期总结。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="定期复盘" scheme="https://hanechiri.github.io/categories/%E5%AE%9A%E6%9C%9F%E5%A4%8D%E7%9B%98/"/>
+    
+    
+      <category term="diary" scheme="https://hanechiri.github.io/tags/diary/"/>
+    
+  </entry>
+  
+  <entry>
     <title>爬取微信公众号文章1获取文章链接</title>
     <link href="https://hanechiri.github.io/post/wechat_offical_account_spider_1_get_article_urls/"/>
     <id>https://hanechiri.github.io/post/wechat_offical_account_spider_1_get_article_urls/</id>
@@ -430,28 +452,6 @@
     
       <category term="过程记录" scheme="https://hanechiri.github.io/categories/%E8%BF%87%E7%A8%8B%E8%AE%B0%E5%BD%95/"/>
     
-    
-  </entry>
-  
-  <entry>
-    <title>简易倒排索引</title>
-    <link href="https://hanechiri.github.io/post/simple_inverted_index/"/>
-    <id>https://hanechiri.github.io/post/simple_inverted_index/</id>
-    <published>2019-03-29T16:11:12.000Z</published>
-    <updated>2019-06-28T03:22:23.653Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;智能信息检索这门课程有个上机作业，题目是“实现倒排索引”。&lt;/p&gt;
-&lt;p&gt;用到了以前没有学的STL中的vector。&lt;/p&gt;
-&lt;p&gt;经过两次课上写代码（3小时）加上课后修bug的时间（晚上十点到十二点）总共5个小时，终于完成了一个简易的倒排索引。因为十点时已经太困，喝了柠檬茶提神结果现在睡不着，所以继续熬夜把博客写完吧。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="项目总结" scheme="https://hanechiri.github.io/categories/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/"/>
-    
-    
-      <category term="c++" scheme="https://hanechiri.github.io/tags/c/"/>
     
   </entry>
   
