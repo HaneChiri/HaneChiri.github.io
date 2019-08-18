@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hanechiri.github.io/"/>
-  <updated>2019-08-11T07:38:10.234Z</updated>
+  <updated>2019-08-18T03:42:34.827Z</updated>
   <id>https://hanechiri.github.io/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一封邀请函</title>
+    <link href="https://hanechiri.github.io/post/invitation/"/>
+    <id>https://hanechiri.github.io/post/invitation/</id>
+    <published>2019-08-18T02:27:57.000Z</published>
+    <updated>2019-08-18T03:42:34.827Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;如果你是从外部链接来到这个页面，那么你也许是获得了进入一个自我管理群的邀请函。&lt;/p&gt;
+&lt;p&gt;你可以阅读下面的介绍，以确定要不要加入这个群。&lt;/p&gt;
+&lt;p&gt;建议在电脑上查看，有侧边栏目录方便跳转。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="自我管理" scheme="https://hanechiri.github.io/categories/%E8%87%AA%E6%88%91%E7%AE%A1%E7%90%86/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>爬取微信公众号文章2获取页面失败</title>
@@ -46,7 +66,7 @@
     <link href="https://hanechiri.github.io/post/2019_semi-annual_summary/"/>
     <id>https://hanechiri.github.io/post/2019_semi-annual_summary/</id>
     <published>2019-08-10T11:28:16.000Z</published>
-    <updated>2019-08-11T10:53:31.725Z</updated>
+    <updated>2019-08-18T02:28:10.119Z</updated>
     
     <summary type="html">
     
@@ -56,7 +76,7 @@
     
     </summary>
     
-      <category term="定期复盘" scheme="https://hanechiri.github.io/categories/%E5%AE%9A%E6%9C%9F%E5%A4%8D%E7%9B%98/"/>
+      <category term="自我管理" scheme="https://hanechiri.github.io/categories/%E8%87%AA%E6%88%91%E7%AE%A1%E7%90%86/"/>
     
     
       <category term="diary" scheme="https://hanechiri.github.io/tags/diary/"/>
@@ -434,24 +454,6 @@
     
     
       <category term="git" scheme="https://hanechiri.github.io/tags/git/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>手工归档编程项目</title>
-    <link href="https://hanechiri.github.io/post/archive_project/"/>
-    <id>https://hanechiri.github.io/post/archive_project/</id>
-    <published>2019-04-07T08:34:09.000Z</published>
-    <updated>2019-06-26T14:53:50.211Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;以前写代码建立的工程到处堆放，导致不能很好的找到以前的代码。虽然以前简单地划分了一下文件夹，但并没有投入太多精力去想如何分类。所以打算养成归档编程项目的好习惯，记录一下过程。也给读者们一个参考。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="过程记录" scheme="https://hanechiri.github.io/categories/%E8%BF%87%E7%A8%8B%E8%AE%B0%E5%BD%95/"/>
-    
     
   </entry>
   
