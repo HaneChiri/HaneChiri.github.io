@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hanechiri.github.io/"/>
-  <updated>2019-08-19T01:38:38.520Z</updated>
+  <updated>2019-09-06T08:55:17.379Z</updated>
   <id>https://hanechiri.github.io/</id>
   
   <author>
@@ -15,6 +15,48 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>python爬虫解析库BeautifulSoup总结</title>
+    <link href="https://hanechiri.github.io/post/python_spider_parser_beautifulsoup/"/>
+    <id>https://hanechiri.github.io/post/python_spider_parser_beautifulsoup/</id>
+    <published>2019-09-06T08:47:50.000Z</published>
+    <updated>2019-09-06T08:55:17.379Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;为了方便使用，将BeautifulSoup库常用的接口进行总结。&lt;/p&gt;
+&lt;p&gt;总结内容来源：《python3网络爬虫开发实战》崔庆才&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="工具使用" scheme="https://hanechiri.github.io/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"/>
+    
+    
+      <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
+    
+      <category term="package" scheme="https://hanechiri.github.io/tags/package/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2019年暑假总结</title>
+    <link href="https://hanechiri.github.io/post/2019_summer_holidays_summary/"/>
+    <id>https://hanechiri.github.io/post/2019_summer_holidays_summary/</id>
+    <published>2019-08-20T03:34:50.000Z</published>
+    <updated>2019-08-21T09:25:33.461Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这个暑假大致是7月7日（到家时间）至8月24日，已经过了6周左右。&lt;/p&gt;
+&lt;p&gt;如果是以前的假期，肯定是不记得自己做过什么了，但是这次每周做了一次周总结，因此可以对照着周总结来进行假期总结。应该是头一次有参考地记录下自己的整个假期了。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="自我管理" scheme="https://hanechiri.github.io/categories/%E8%87%AA%E6%88%91%E7%AE%A1%E7%90%86/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>一封邀请函</title>
@@ -413,48 +455,6 @@
       <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
     
       <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>python爬虫学习笔记4模拟登录函数的优化</title>
-    <link href="https://hanechiri.github.io/post/python_spider_note4optimization_of_the_login_function/"/>
-    <id>https://hanechiri.github.io/post/python_spider_note4optimization_of_the_login_function/</id>
-    <published>2019-04-12T14:21:05.000Z</published>
-    <updated>2019-07-15T10:33:08.995Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;前面写的代码虽然完成了爬取的功能，但是过于凌乱，于是打算重构一遍。首先从登陆开始&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="项目总结" scheme="https://hanechiri.github.io/categories/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/"/>
-    
-    
-      <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
-    
-      <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>git恢复误提交的内容</title>
-    <link href="https://hanechiri.github.io/post/git_reset_incorrect_commit/"/>
-    <id>https://hanechiri.github.io/post/git_reset_incorrect_commit/</id>
-    <published>2019-04-11T11:31:01.000Z</published>
-    <updated>2019-06-26T15:00:49.030Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;在图书馆敲下最后几行代码，然后就着手机热点把爬虫代码push上去之后，突然想起来，我好像忘了把账号密码部分改成手动输入，现在push上去的是明文啊！掀桌！早知道就回宿舍上传了，说不准还能想起来。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="过程记录" scheme="https://hanechiri.github.io/categories/%E8%BF%87%E7%A8%8B%E8%AE%B0%E5%BD%95/"/>
-    
-    
-      <category term="git" scheme="https://hanechiri.github.io/tags/git/"/>
     
   </entry>
   
