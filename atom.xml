@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hanechiri.github.io/"/>
-  <updated>2019-09-06T08:55:17.379Z</updated>
+  <updated>2019-09-10T12:44:04.100Z</updated>
   <id>https://hanechiri.github.io/</id>
   
   <author>
@@ -17,11 +17,38 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>python爬虫解析库BeautifulSoup总结</title>
+    <title>MFC用对话框获取输入</title>
+    <link href="https://hanechiri.github.io/post/MFC_get_input_by_Dialog/"/>
+    <id>https://hanechiri.github.io/post/MFC_get_input_by_Dialog/</id>
+    <published>2019-09-10T11:20:43.000Z</published>
+    <updated>2019-09-10T12:44:04.100Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在MFC调用对话框读入数据，并在客户区输出。&lt;/p&gt;
+&lt;p&gt;这是《计算机图形学基础教程》的一个习题：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;使用MFC设计一个长方形类CRectangle，调用对话框读入长方形的长度和宽度，在客户区输出长方形的周长和面积。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这个书上并没有教怎么用对话框读取输入，我在这之前也完全没接触过MFC的对话框。弄了两小时，终于把这道题做出来了。以此文记录一下&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="工具使用" scheme="https://hanechiri.github.io/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"/>
+    
+    
+      <category term="framework" scheme="https://hanechiri.github.io/tags/framework/"/>
+    
+      <category term="mfc" scheme="https://hanechiri.github.io/tags/mfc/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python爬虫解析库BeautifulSoup速查</title>
     <link href="https://hanechiri.github.io/post/python_spider_parser_beautifulsoup/"/>
     <id>https://hanechiri.github.io/post/python_spider_parser_beautifulsoup/</id>
     <published>2019-09-06T08:47:50.000Z</published>
-    <updated>2019-09-06T08:55:17.379Z</updated>
+    <updated>2019-09-10T11:10:22.572Z</updated>
     
     <summary type="html">
     
@@ -433,28 +460,6 @@
     
     
       <category term="java" scheme="https://hanechiri.github.io/tags/java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>python爬虫学习笔记5爬虫类结构优化</title>
-    <link href="https://hanechiri.github.io/post/python_spider_note5optimization_of_the_spider_class/"/>
-    <id>https://hanechiri.github.io/post/python_spider_note5optimization_of_the_spider_class/</id>
-    <published>2019-04-21T04:44:01.000Z</published>
-    <updated>2019-07-15T10:33:13.970Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;打算全部以cookie来登陆，而不依赖于session（因为听组长说session没cookie快，而且我想学些新东西而不是翻来覆去地在舒适区鼓捣）。弄了几天终于弄出来个代码不那么混乱的爬虫类了，更新一下博文来总结一下。代码在我github的spider库里面。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="项目总结" scheme="https://hanechiri.github.io/categories/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/"/>
-    
-    
-      <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
-    
-      <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
     
   </entry>
   

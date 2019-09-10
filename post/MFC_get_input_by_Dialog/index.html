@@ -100,21 +100,25 @@
 
 
 
-  <meta name="description" content="这个暑假大致是7月7日（到家时间）至8月24日，已经过了6周左右。 如果是以前的假期，肯定是不记得自己做过什么了，但是这次每周做了一次周总结，因此可以对照着周总结来进行假期总结。应该是头一次有参考地记录下自己的整个假期了。">
+  <meta name="description" content="在MFC调用对话框读入数据，并在客户区输出。 这是《计算机图形学基础教程》的一个习题：  使用MFC设计一个长方形类CRectangle，调用对话框读入长方形的长度和宽度，在客户区输出长方形的周长和面积。  这个书上并没有教怎么用对话框读取输入，我在这之前也完全没接触过MFC的对话框。弄了两小时，终于把这道题做出来了。以此文记录一下">
+<meta name="keywords" content="framework,mfc">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2019年暑假总结">
-<meta property="og:url" content="https://hanechiri.github.io/post/2019_summer_holidays_summary/index.html">
+<meta property="og:title" content="MFC用对话框获取输入">
+<meta property="og:url" content="https://hanechiri.github.io/post/MFC_get_input_by_Dialog/index.html">
 <meta property="og:site_name" content="尘世未解">
-<meta property="og:description" content="这个暑假大致是7月7日（到家时间）至8月24日，已经过了6周左右。 如果是以前的假期，肯定是不记得自己做过什么了，但是这次每周做了一次周总结，因此可以对照着周总结来进行假期总结。应该是头一次有参考地记录下自己的整个假期了。">
+<meta property="og:description" content="在MFC调用对话框读入数据，并在客户区输出。 这是《计算机图形学基础教程》的一个习题：  使用MFC设计一个长方形类CRectangle，调用对话框读入长方形的长度和宽度，在客户区输出长方形的周长和面积。  这个书上并没有教怎么用对话框读取输入，我在这之前也完全没接触过MFC的对话框。弄了两小时，终于把这道题做出来了。以此文记录一下">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190821160011.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190821160255.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190821164256.png">
-<meta property="og:updated_time" content="2019-08-21T09:25:33.461Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190910194014.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190910194429.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190910195108.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190910195436.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190910200353.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190910201233.png">
+<meta property="og:updated_time" content="2019-09-10T12:44:04.100Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="2019年暑假总结">
-<meta name="twitter:description" content="这个暑假大致是7月7日（到家时间）至8月24日，已经过了6周左右。 如果是以前的假期，肯定是不记得自己做过什么了，但是这次每周做了一次周总结，因此可以对照着周总结来进行假期总结。应该是头一次有参考地记录下自己的整个假期了。">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190821160011.png">
+<meta name="twitter:title" content="MFC用对话框获取输入">
+<meta name="twitter:description" content="在MFC调用对话框读入数据，并在客户区输出。 这是《计算机图形学基础教程》的一个习题：  使用MFC设计一个长方形类CRectangle，调用对话框读入长方形的长度和宽度，在客户区输出长方形的周长和面积。  这个书上并没有教怎么用对话框读取输入，我在这之前也完全没接触过MFC的对话框。弄了两小时，终于把这道题做出来了。以此文记录一下">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190910194014.png">
 
 
 
@@ -123,7 +127,7 @@
 
 
 
-  <link rel="canonical" href="https://hanechiri.github.io/post/2019_summer_holidays_summary/">
+  <link rel="canonical" href="https://hanechiri.github.io/post/MFC_get_input_by_Dialog/">
 
 
 
@@ -133,7 +137,7 @@
   };
 </script>
 
-  <title>2019年暑假总结 | 尘世未解</title>
+  <title>MFC用对话框获取输入 | 尘世未解</title>
   
 
 
@@ -416,7 +420,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hanechiri.github.io/post/2019_summer_holidays_summary/">
+    <link itemprop="mainEntityOfPage" href="https://hanechiri.github.io/post/MFC_get_input_by_Dialog/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="憧憬少">
@@ -433,7 +437,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">2019年暑假总结
+          <h1 class="post-title" itemprop="name headline">MFC用对话框获取输入
 
               
             
@@ -459,24 +463,12 @@
                 
               
 
-              <time title="创建时间：2019-08-20 11:34:50" itemprop="dateCreated datePublished" datetime="2019-08-20T11:34:50+08:00">2019-08-20</time>
+              <time title="创建时间：2019-09-10 19:20:43 / 修改时间：20:44:04" itemprop="dateCreated datePublished" datetime="2019-09-10T19:20:43+08:00">2019-09-10</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-08-21 17:25:33" itemprop="dateModified" datetime="2019-08-21T17:25:33+08:00">2019-08-21</time>
               
             
           </span>
@@ -493,7 +485,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/自我管理/" itemprop="url" rel="index"><span itemprop="name">自我管理</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/工具使用/" itemprop="url" rel="index"><span itemprop="name">工具使用</span></a></span>
 
                 
                 
@@ -512,8 +504,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/post/2019_summer_holidays_summary/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/post/2019_summer_holidays_summary/" itemprop="commentCount"></span>
+                <a href="/post/MFC_get_input_by_Dialog/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/post/MFC_get_input_by_Dialog/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -521,7 +513,7 @@
 
           
           
-            <span id="/post/2019_summer_holidays_summary/" class="leancloud_visitors" data-flag-title="2019年暑假总结">
+            <span id="/post/MFC_get_input_by_Dialog/" class="leancloud_visitors" data-flag-title="MFC用对话框获取输入">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -552,53 +544,60 @@
       
 
       
-        <p>这个暑假大致是7月7日（到家时间）至8月24日，已经过了6周左右。</p>
-<p>如果是以前的假期，肯定是不记得自己做过什么了，但是这次每周做了一次周总结，因此可以对照着周总结来进行假期总结。应该是头一次有参考地记录下自己的整个假期了。</p>
-<a id="more"></a>
-<h1 id="做了什么事情"><a href="#做了什么事情" class="headerlink" title="做了什么事情"></a>做了什么事情</h1><h2 id="科目二"><a href="#科目二" class="headerlink" title="科目二"></a>科目二</h2><p>最主要做的事情是考驾照的科目二，每天都去练一个上午或者一个下午。</p>
-<p>认识了几个同一个高中的同学，并且和陌生人打交道没有那么困难了。</p>
-<h2 id="bilibili"><a href="#bilibili" class="headerlink" title="bilibili"></a>bilibili</h2><p>代码分享群里面有个人问我要不要参与b站的暑假爆肝活动，在7月28日之前投稿4个视频。我想要奖励里面的一个月大会员，于是就参加了。</p>
-<p>7月13日投了一个:<a href="https://www.bilibili.com/video/av58951308/" target="_blank" rel="noopener">“如何像项目一样整理和管理你的个人电脑文件”</a>，分享了一下我自己不久前开始使用的整理电脑文件的方式，而且特地利用“网易见外”这个网站来试着加上字幕。比起分享代码思路，这种视频受众更加广一些。</p>
-<p>通过自动上字幕，我发现自己讲解的时候语气词和停顿还蛮多的，需要多锻炼表达能力。</p>
-<p>学习python，利用python写了一个脚本，用来自动帮我的明日方舟的关卡点“开始游戏”按钮，灵感来自一个用机械装置做“物理外挂”的视频。录制了一个演示视频：<a href="https://www.bilibili.com/video/av60038926/" target="_blank" rel="noopener">“明日方舟代理指挥“代理指挥”的代理指挥”</a></p>
-<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190821160011.png" alt="运行示意图"></p>
-<p>后来没什么想做的视频主题，就没有继续做了。</p>
-<p>到了八月，买了一个板绘用的数位板，开始学习板绘作为平时的兴趣。八月录制了三个临摹过程的视频，感觉不错。</p>
-<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190821160255.png" alt=""></p>
-<h2 id="个人博客-amp-github"><a href="#个人博客-amp-github" class="headerlink" title="个人博客 &amp; github"></a>个人博客 &amp; github</h2><h3 id="python爬虫"><a href="#python爬虫" class="headerlink" title="python爬虫"></a>python爬虫</h3><p>使我开始更加积极地更新博客的事件是，我终于在7月15日解决了信息门户的登录密码加密问题。</p>
-<p>将以前存放在有道云笔记里面的分析过程重新整理了一下写成博文：<a href="https://hanechiri.github.io/post/portal_login_encrypt/">“学校信息门户模拟登录之密码加密”</a></p>
-<p>再利用这个加密模块，很快写出了模拟登录信息门户的python自定义包：<a href="https://hanechiri.github.io/post/portal_login/">“学校信息门户模拟登录”</a></p>
-<p>没想到这个自定义包竟然获得了<a href="https://lollipopnougat.github.io/Crepeblog/" target="_blank" rel="noopener"><strong>封掣</strong></a>大佬的pull request（也就是他参与了这个项目，贡献了一部分代码）！这可是我第一次获得pull request！兴奋之情可想而知，我当时就想继续写点什么出来。</p>
-<p>不过<a href="https://github.com/HaneChiri/chd_portal_login" target="_blank" rel="noopener">这个项目</a>发展空间并没有太多，最多输出cookies文件给别的程序或者脚本用。在写好了文档，增加了成绩查询，学习了如何将其打包成exe文件，又学习了如何release一个版本之后，就没有什么可以扩展的地方了。</p>
-<p>在这个过程中，除了上面说到的那些，我还开始使用github的issue来记录待办事项和bug，等到有空的时候去修复。</p>
-<p><strong>在github上面终于有了一个像样的项目了，这让我很高兴。</strong></p>
-<p>我又开始把之前写的信息门户爬虫给整理了一下，整理到了一个github仓库当中：<a href="https://github.com/HaneChiri/chd_spider" target="_blank" rel="noopener">“chd_spider”</a></p>
-<p>在这个成绩的激励下，我开始尝试做之前领取的任务：爬取微信公众号，确实有<a href="https://hanechiri.github.io/post/wechat_offical_account_spider_1_get_article_urls/">成功的部分</a>，不过目前<a href="https://hanechiri.github.io/post/wechat_offical_account_spider_2_fail_to_get_html/">卡关了</a></p>
-<h3 id="博客主题优化"><a href="#博客主题优化" class="headerlink" title="博客主题优化"></a>博客主题优化</h3><p>给博客增加了几个功能：</p>
-<ul>
-<li>RSS简易信息聚合</li>
-<li>valine评论</li>
-</ul>
-<p>hexo的Next主题挺方便的，将所有东西都准备好了，增加这些功能挺容易的。</p>
-<h4 id="RSS简易信息聚合"><a href="#RSS简易信息聚合" class="headerlink" title="RSS简易信息聚合"></a>RSS简易信息聚合</h4><p>在设计自我管理系统中的信息输入子系统时，了解到<a href="https://baike.baidu.com/item/rss/24470?fr=aladdin" target="_blank" rel="noopener">RSS</a>这个概念。</p>
+        <p>在MFC调用对话框读入数据，并在客户区输出。</p>
+<p>这是《计算机图形学基础教程》的一个习题：</p>
 <blockquote>
-<p>RSS(Really Simple Syndication)是一种描述和同步网站内容的格式，是使用最广泛的XML应用。RSS搭建了信息迅速传播的一个技术平台，使得每个人都成为潜在的信息提供者。发布一个RSS文件后，这个RSS Feed中包含的信息就能直接被其他站点调用，而且由于这些数据都是标准的XML格式，所以也能在其他的终端和服务中使用，是一种描述和同步网站内容的格式。</p>
-<p>就本质而言，RSS和Atom是一种信息聚合的技术，都是为了提供一种更为方便、高效的互联网信息的发布和共享，用更少的时间分享更多的信息。同时RSS和Atom又是实现信息聚合的两种不同规范</p>
-<p>（来自百度百科）</p>
+<p>使用MFC设计一个长方形类CRectangle，调用对话框读入长方形的长度和宽度，在客户区输出长方形的周长和面积。</p>
 </blockquote>
-<p>以我的理解，RSS的Feed其实就是一个将网站的内容格式化的XML文件，也就是一个“地图”，按照一定的标准标注了特定内容，RSS阅读器其实就是一个爬虫软件。将RSS Feed给RSS阅读器之后，阅读器爬虫按照这份“地图”，解析出需要爬取的链接，然后获取文章内容，再展现给用户。</p>
-<p>弄懂了原理之后，我帮我的博客也加了一个RSS插件，在部署博客的同时生成RSS Feed（<a href="https://hanechiri.github.io/atom.xml">我博客的RSS Feed</a>），这样别人使用RSS阅读器就可以“订阅”我的博客，在我的博客更新的时候可以第一时间看到。</p>
-<p>在电脑上我下了一个RSS阅读器<a href="http://irreader.fatecore.com/" target="_blank" rel="noopener">irreader</a>，订阅了几个朋友的博客。除此之外，这个阅读器还能订阅没有Feed的链接，我猜原理是根据你选择的几个链接来自动生成一个Feed来进行订阅，甚至能订阅B站up的视频以及贴吧的帖子，还是挺好用的。</p>
-<h3 id="valine评论"><a href="#valine评论" class="headerlink" title="valine评论"></a>valine评论</h3><p>和阅读量计数用了同一个leancloud应用，效果挺不错：</p>
-<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190821164256.png" alt=""></p>
-<p>但遗憾的是，leancloud在经过上个月的域名封禁事件之后，又是实名注册又是绑定备案域名的，十月一号之后就得找别的办法来弄评论和点击数了。</p>
-<h1 id="半途而废的事情"><a href="#半途而废的事情" class="headerlink" title="半途而废的事情"></a>半途而废的事情</h1><ul>
-<li>暑假开始的运动目标没有完成，意志力随着身体素质的变差越来越弱</li>
-<li>跟着廖雪峰python教程写代码的目标没有完成</li>
-<li>利用time meter记录时间</li>
-<li>每天在anki录入30个单词</li>
-<li>晚上十一点睡</li>
+<p>这个书上并没有教怎么用对话框读取输入，我在这之前也完全没接触过MFC的对话框。弄了两小时，终于把这道题做出来了。以此文记录一下</p>
+<a id="more"></a>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a href="http://www.docin.com/p-242469989.html" target="_blank" rel="noopener">MFC调用输入对话框并返回输入信息</a></li>
+<li><a href="https://www.sogou.com/link?url=DSOYnZeCC_owkDvmYG0gMz-JrNZwwuWK8exNhhiXPsEIKMrTb1L7Tc88xhL_moz5C1NeXNQ2BY9d-4ud3wkh5slk12zu172c4pCyk2vXyzKM7-ZhrzgWRu8yqGHnU-QomKwJVMAaAqOt5pUc3zy0dg.." target="_blank" rel="noopener">MFC对话框和常用教程</a></li>
 </ul>
+<h1 id="设计对话框"><a href="#设计对话框" class="headerlink" title="设计对话框"></a>设计对话框</h1><p>找了一下，MFC似乎没有像python那样的<code>input()</code>或者像是VB里面的<code>inputBox()</code>之类的函数，所以得自己先设计对话框。</p>
+<p>首先打开<code>Resource View</code>，在<code>Dialog</code>处右键菜单插入新的对话框。</p>
+<p>接着就是放控件以及给控件命名了。这个比较简单，就不详细说了。</p>
+<p>我设计的对话框有两个<code>Edit</code>控件，一个是<code>IDC_LENGTH</code>，用于输入长方形的长，一个是<code>IDC_WIDTH</code>，用于输入长方形的宽。</p>
+<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190910194014.png" alt=""></p>
+<h1 id="新建对话框类"><a href="#新建对话框类" class="headerlink" title="新建对话框类"></a>新建对话框类</h1><p>在设计好的对话框上右键菜单打开类向导，也就是<code>classWizard</code>，会弹出一个对话框如下图：</p>
+<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190910194429.png" alt=""></p>
+<p>大致意思是：检测到有个新建的对话框资源，你可能想要为它创建一个类，要创建吗？</p>
+<p>点确定创建一个对应的类。</p>
+<p>如果没有弹出这个对话框，你也可以在类向导右上角的<code>Add Class</code>按钮来创建一个MFC里面的类，把基类调整成<code>CDialog</code>，<code>Dialog ID</code>设置成你刚刚设计的对话框ID就可以了。</p>
+<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190910195108.png" alt=""></p>
+<p>（其实命名最好在后面加个<code>Dlg</code>后缀以表示这是对话框，但是我懒得改了）</p>
+<h1 id="添加关联变量"><a href="#添加关联变量" class="headerlink" title="添加关联变量"></a>添加关联变量</h1><p>在类向导里面选择第二个选项卡，也就是<code>Member Bariables</code>成员变量选项卡。</p>
+<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190910195436.png" alt=""></p>
+<p>这里面列出了对话框上控件的ID，这些ID可以在设计对话框的时候指定。</p>
+<p>选中用于输入数据的控件，然后点击<code>Add Variable</code>添加对话框类的成员变量。改变量名字，其他选项默认即可。</p>
+<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190910200353.png" alt=""></p>
+<p>这个操作与你直接在类代码中添加的区别是，这个操作会建立起控件和这个成员变量的关联关系。这个关联关系体现在自定义对话框类的<code>DoDataExchange()</code>这个成员函数内：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CInputRectangle::DoDataExchange(CDataExchange* pDX)</span><br><span class="line">&#123;</span><br><span class="line">	CDialog::DoDataExchange(pDX);</span><br><span class="line">	<span class="comment">//&#123;&#123;AFX_DATA_MAP(CInputRectangle)</span></span><br><span class="line">	DDX_Text(pDX, IDC_LENGTH, m_edLength);<span class="comment">//添加关联变量之前，这里是没有这两行的</span></span><br><span class="line">	DDX_Text(pDX, IDC_WIDTH, m_edWidth);</span><br><span class="line">	<span class="comment">//&#125;&#125;AFX_DATA_MAP</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="调用对话框"><a href="#调用对话框" class="headerlink" title="调用对话框"></a>调用对话框</h1><p>如图，我打算使用菜单来调用对话框输入矩形长和宽。</p>
+<p><img src="https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190910201233.png" alt=""></p>
+<p>添加菜单的过程不详细说。</p>
+<p>直接跳到菜单的响应函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CComputerGraphicsExerciseView::OnHomework2_2() </span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> Add your command handler code here</span></span><br><span class="line">	</span><br><span class="line">	CInputRectangleDlg inputDlg;</span><br><span class="line">	<span class="keyword">int</span> nResponse = inputDlg.DoModal();</span><br><span class="line">    <span class="keyword">if</span>(nResponse==IDOK)</span><br><span class="line">	&#123;</span><br><span class="line">        <span class="comment">//这里获取输入并在客户区输出</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在文件开头include对话框类的头文件，声明对象，并调用对话框对象的<code>DoModal()</code>方法。</p>
+<p>这个方法在对话框关闭之后，才会返回一个值，对应关闭对话框的动作，这里我用<code>nResponse</code>这个int变量接收返回值。</p>
+<p>接着判断返回值，如果是点击确定按钮关闭对话框，那么获取对话框的输入，并且在客户区输出。</p>
+<h2 id="获取输入"><a href="#获取输入" class="headerlink" title="获取输入"></a>获取输入</h2><p>绑定对话框上两个编辑框的变量分别为：<code>m_edWidth</code>和<code>m_edLength</code>。默认情况下，它们是CString类型的，因此需要进行类型转换。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> width=atoi(inputDlg.m_edWidth.GetBuffer(<span class="number">0</span>));</span><br><span class="line"><span class="keyword">int</span> height=atoi(inputDlg.m_edLength.GetBuffer(<span class="number">0</span>));</span><br></pre></td></tr></table></figure>
+<p>对上面两行代码的说明：</p>
+<ul>
+<li>两个关联变量是<code>public</code>的，因此可以直接访问。</li>
+<li>CString的<code>GetBuffer()</code>成员函数返回对应的字符数组类型的字符串</li>
+<li>atoi（ASCII to integer）把字符串转换成整型数</li>
+</ul>
+<h2 id="进行输出"><a href="#进行输出" class="headerlink" title="进行输出"></a>进行输出</h2><p>获取设备上下文，并调整坐标系：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CDC *pDC=GetDC();<span class="comment">//获取设备上下文</span></span><br><span class="line"></span><br><span class="line">CRect rect;</span><br><span class="line">GetClientRect(&amp;rect);</span><br><span class="line">pDC-&gt;SetMapMode(MM_ANISOTROPIC);</span><br><span class="line">pDC-&gt;SetWindowExt(rect.Width(),rect.Height());</span><br><span class="line">pDC-&gt;SetViewportExt(rect.Width(),-rect.Height());</span><br><span class="line">pDC-&gt;SetViewportOrg(rect.Width()/<span class="number">2</span>,rect.Height()/<span class="number">2</span>);</span><br><span class="line">rect.OffsetRect(-rect.Width()/<span class="number">2</span>,-rect.Height()/<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">pDC-&gt;Rectangle(rect);<span class="comment">//清空屏幕</span></span><br></pre></td></tr></table></figure>
+<p>输出数据，并释放设备上下文：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">CRectangle <span class="title">crect</span><span class="params">(width,height)</span></span>;</span><br><span class="line">		</span><br><span class="line">CString perimeter_text,area_text;</span><br><span class="line">perimeter_text.Format(<span class="string">"长方形的周长为：%.2f"</span>,crect.perimeter());</span><br><span class="line">area_text.Format(<span class="string">"长方形的面积为：%.2f"</span>,crect.area());</span><br><span class="line"></span><br><span class="line">pDC-&gt;TextOut(<span class="number">0</span>,<span class="number">0</span>,perimeter_text);</span><br><span class="line">pDC-&gt;TextOut(<span class="number">0</span>,<span class="number">20</span>,area_text);</span><br><span class="line"></span><br><span class="line">ReleaseDC(pDC);<span class="comment">//释放设备上下文</span></span><br></pre></td></tr></table></figure>
+<p>这样就完成了</p>
+<h2 id="菜单代码概览"><a href="#菜单代码概览" class="headerlink" title="菜单代码概览"></a>菜单代码概览</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CComputerGraphicsExerciseView::OnHomework2_2() </span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> Add your command handler code here</span></span><br><span class="line">	</span><br><span class="line">	CInputRectangleDlg inputDlg;</span><br><span class="line">	<span class="keyword">int</span> nResponse = inputDlg.DoModal();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(nResponse==IDOK)</span><br><span class="line">	&#123;</span><br><span class="line">		</span><br><span class="line">		CDC *pDC=GetDC();</span><br><span class="line"></span><br><span class="line">		CRect rect;</span><br><span class="line">		GetClientRect(&amp;rect);</span><br><span class="line">		pDC-&gt;SetMapMode(MM_ANISOTROPIC);</span><br><span class="line">		pDC-&gt;SetWindowExt(rect.Width(),rect.Height());</span><br><span class="line">		pDC-&gt;SetViewportExt(rect.Width(),-rect.Height());</span><br><span class="line">		pDC-&gt;SetViewportOrg(rect.Width()/<span class="number">2</span>,rect.Height()/<span class="number">2</span>);</span><br><span class="line">		rect.OffsetRect(-rect.Width()/<span class="number">2</span>,-rect.Height()/<span class="number">2</span>);</span><br><span class="line">		</span><br><span class="line">		pDC-&gt;Rectangle(rect);<span class="comment">//清空屏幕</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">int</span> width=atoi(inputDlg.m_edWidth.GetBuffer(<span class="number">0</span>));</span><br><span class="line">		<span class="keyword">int</span> height=atoi(inputDlg.m_edLength.GetBuffer(<span class="number">0</span>));</span><br><span class="line">		<span class="function">CRectangle <span class="title">crect</span><span class="params">(width,height)</span></span>;</span><br><span class="line">		</span><br><span class="line">		CString perimeter_text,area_text;</span><br><span class="line">		perimeter_text.Format(<span class="string">"长方形的周长为：%.2f"</span>,crect.perimeter());</span><br><span class="line">		area_text.Format(<span class="string">"长方形的面积为：%.2f"</span>,crect.area());</span><br><span class="line"></span><br><span class="line">		pDC-&gt;TextOut(<span class="number">0</span>,<span class="number">0</span>,perimeter_text);</span><br><span class="line">		pDC-&gt;TextOut(<span class="number">0</span>,<span class="number">20</span>,area_text);</span><br><span class="line">		</span><br><span class="line">		ReleaseDC(pDC);</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="错误思路"><a href="#错误思路" class="headerlink" title="错误思路"></a>错误思路</h1><p>一开始我以为需要编写对话框的<code>ok</code>按钮的响应事件，写成了下面这样，试了一下不行，不知道为什么：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> CInputRectangleDlg::OnOK() </span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// <span class="doctag">TODO:</span> Add extra validation here</span></span><br><span class="line">	</span><br><span class="line">	CDialog::OnOK();</span><br><span class="line">	</span><br><span class="line">	UpdateData();<span class="comment">//用于将数据从对话框同步到成员变量中</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> width=atoi( m_edWidth.GetBuffer(<span class="number">0</span>));</span><br><span class="line">	<span class="keyword">int</span> height=atoi( m_edLength.GetBuffer(<span class="number">0</span>));</span><br><span class="line">	<span class="function">CRectangle <span class="title">crect</span><span class="params">(width,height)</span></span>;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	CDC *pDC=GetDC();</span><br><span class="line"></span><br><span class="line">	CRect rect;</span><br><span class="line">	GetClientRect(&amp;rect);</span><br><span class="line">	pDC-&gt;SetMapMode(MM_ANISOTROPIC);</span><br><span class="line">	pDC-&gt;SetWindowExt(rect.Width(),rect.Height());</span><br><span class="line">	pDC-&gt;SetViewportExt(rect.Width(),-rect.Height());</span><br><span class="line">	pDC-&gt;SetViewportOrg(rect.Width()/<span class="number">2</span>,rect.Height()/<span class="number">2</span>);</span><br><span class="line">	rect.OffsetRect(-rect.Width()/<span class="number">2</span>,-rect.Height()/<span class="number">2</span>);</span><br><span class="line">	</span><br><span class="line">	pDC-&gt;Rectangle(rect);<span class="comment">//清空屏幕</span></span><br><span class="line">	</span><br><span class="line">	CString perimeter_text,area_text;</span><br><span class="line">	perimeter_text.Format(<span class="string">"长方形的周长为：%.2f"</span>,crect.perimeter());</span><br><span class="line">	area_text.Format(<span class="string">"长方形的面积为：%.2f"</span>,crect.area());</span><br><span class="line"></span><br><span class="line">	pDC-&gt;TextOut(<span class="number">100</span>,<span class="number">100</span>,perimeter_text);</span><br><span class="line">	pDC-&gt;TextOut(<span class="number">100</span>,<span class="number">300</span>,area_text);</span><br><span class="line"></span><br><span class="line">	ReleaseDC(pDC);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -620,6 +619,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/framework/" rel="tag"># framework</a>
+          
+            <a href="/tags/mfc/" rel="tag"># mfc</a>
+          
+        </div>
+      
 
       
       
@@ -629,8 +636,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/post/invitation/" rel="next" title="一封邀请函">
-                <i class="fa fa-chevron-left"></i> 一封邀请函
+              <a href="/post/python_spider_parser_beautifulsoup/" rel="next" title="python爬虫解析库BeautifulSoup速查">
+                <i class="fa fa-chevron-left"></i> python爬虫解析库BeautifulSoup速查
               </a>
             
           </div>
@@ -638,10 +645,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/post/python_spider_parser_beautifulsoup/" rel="prev" title="python爬虫解析库BeautifulSoup速查">
-                python爬虫解析库BeautifulSoup速查 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -894,7 +897,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#做了什么事情"><span class="nav-text">做了什么事情</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#科目二"><span class="nav-text">科目二</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bilibili"><span class="nav-text">bilibili</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#个人博客-amp-github"><span class="nav-text">个人博客 &amp; github</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#python爬虫"><span class="nav-text">python爬虫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#博客主题优化"><span class="nav-text">博客主题优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RSS简易信息聚合"><span class="nav-text">RSS简易信息聚合</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#valine评论"><span class="nav-text">valine评论</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#半途而废的事情"><span class="nav-text">半途而废的事情</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#参考链接"><span class="nav-text">参考链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设计对话框"><span class="nav-text">设计对话框</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#新建对话框类"><span class="nav-text">新建对话框类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#添加关联变量"><span class="nav-text">添加关联变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#调用对话框"><span class="nav-text">调用对话框</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#获取输入"><span class="nav-text">获取输入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进行输出"><span class="nav-text">进行输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#菜单代码概览"><span class="nav-text">菜单代码概览</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#错误思路"><span class="nav-text">错误思路</span></a></li></ol></div>
             
 
           </div>
