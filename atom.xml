@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hanechiri.github.io/"/>
-  <updated>2019-09-10T12:44:04.100Z</updated>
+  <updated>2019-09-14T04:22:02.971Z</updated>
   <id>https://hanechiri.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://hanechiri.github.io/post/MFC_get_input_by_Dialog/"/>
     <id>https://hanechiri.github.io/post/MFC_get_input_by_Dialog/</id>
     <published>2019-09-10T11:20:43.000Z</published>
-    <updated>2019-09-10T12:44:04.100Z</updated>
+    <updated>2019-09-14T04:22:02.971Z</updated>
     
     <summary type="html">
     
@@ -37,9 +37,11 @@
       <category term="工具使用" scheme="https://hanechiri.github.io/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"/>
     
     
+      <category term="mfc" scheme="https://hanechiri.github.io/tags/mfc/"/>
+    
       <category term="framework" scheme="https://hanechiri.github.io/tags/framework/"/>
     
-      <category term="mfc" scheme="https://hanechiri.github.io/tags/mfc/"/>
+      <category term="c++" scheme="https://hanechiri.github.io/tags/c/"/>
     
   </entry>
   
@@ -432,13 +434,13 @@
       <category term="工具使用" scheme="https://hanechiri.github.io/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"/>
     
     
+      <category term="framework" scheme="https://hanechiri.github.io/tags/framework/"/>
+    
       <category term="python" scheme="https://hanechiri.github.io/tags/python/"/>
     
       <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
     
       <category term="scrapy" scheme="https://hanechiri.github.io/tags/scrapy/"/>
-    
-      <category term="framework" scheme="https://hanechiri.github.io/tags/framework/"/>
     
   </entry>
   
