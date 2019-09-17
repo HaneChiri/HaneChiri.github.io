@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hanechiri.github.io/"/>
-  <updated>2019-09-14T04:22:02.971Z</updated>
+  <updated>2019-09-17T06:45:23.657Z</updated>
   <id>https://hanechiri.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MFC习题|RGB颜色模型演示程序</title>
+    <link href="https://hanechiri.github.io/post/MFC_RGB_demonstration/"/>
+    <id>https://hanechiri.github.io/post/MFC_RGB_demonstration/</id>
+    <published>2019-09-14T04:19:05.000Z</published>
+    <updated>2019-09-17T06:45:23.657Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;习题来源：《计算机图形学基础教程》孔令德（第二版）&lt;/p&gt;
+&lt;p&gt;用mfc基于对话框的编程，实现下图的RGB颜色模型演示程序。点击颜色按钮能将“颜色及代码”这个组框中的静态文本框变成对应的颜色，调色板按钮可以调出自带的颜色选择对话框。滚动条和旁边的编辑框都可以调整颜色。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/HaneChiri/PicBed/master/blog_images/20190914121959.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="项目总结" scheme="https://hanechiri.github.io/categories/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/"/>
+    
+    
+      <category term="mfc" scheme="https://hanechiri.github.io/tags/mfc/"/>
+    
+      <category term="framework" scheme="https://hanechiri.github.io/tags/framework/"/>
+    
+      <category term="c++" scheme="https://hanechiri.github.io/tags/c/"/>
+    
+  </entry>
   
   <entry>
     <title>MFC用对话框获取输入</title>
@@ -441,27 +467,6 @@
       <category term="spider" scheme="https://hanechiri.github.io/tags/spider/"/>
     
       <category term="scrapy" scheme="https://hanechiri.github.io/tags/scrapy/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>java基于AWT的对战小游戏</title>
-    <link href="https://hanechiri.github.io/post/java_game_FightFieldFrame/"/>
-    <id>https://hanechiri.github.io/post/java_game_FightFieldFrame/</id>
-    <published>2019-06-13T12:39:29.000Z</published>
-    <updated>2019-06-26T14:56:06.747Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;这学期的java课设弄完了，写个博客总结一下。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.bilibili.com/video/av54526303/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;哔哩哔哩对应视频的传送门&lt;/a&gt;&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="项目总结" scheme="https://hanechiri.github.io/categories/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/"/>
-    
-    
-      <category term="java" scheme="https://hanechiri.github.io/tags/java/"/>
     
   </entry>
   
