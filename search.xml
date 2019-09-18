@@ -57,7 +57,7 @@
   <entry>
     <title><![CDATA[爬取微信公众号文章2获取页面失败]]></title>
     <url>%2Fpost%2Fwechat_offical_account_spider_2_fail_to_get_html%2F</url>
-    <content type="text"><![CDATA[虽然获取到了微信公众号文章的链接，但没法获取到包含文章内容的html。 花了一个小时来研究怎么获取页面，最后还是失败了。 requests首先按照一般思路，使用requests库来获取页面，但是获取到的却是不含有文章内容的一堆js代码和css代码，以及少量的没有内容的html。 去查看Ajax请求，有4个请求，其中三个都是没有文章内容的json，而第一个请求也是最可疑的一个，无法预览。 第一个请求的接口： 1https://mp.weixin.qq.com/mp/appmsgreport?action=page_time&amp;__biz=MzAwNjA3Nzg0MA==&amp;uin=&amp;key=&amp;pass_ticket=&amp;wxtoken=777&amp;devicetype=&amp;clientversion=&amp;appmsg_token=&amp;x5=0&amp;f=json 这是以POST方式访问的接口，下面一大堆的Form data，这其中甚至还有文章的标题！ 也就是说在访问这个接口之前，就已经得知了文章的内容了吗？ selenium我觉得模拟请求太过于复杂，于是尝试使用selenium来获取。 但是得到的内容和上文说的一样，并没有什么不同。非常奇怪。加了60秒的延时让它充分渲染也没用，问题不在这里。]]></content>
+    <content type="text"><![CDATA[虽然获取到了微信公众号文章的链接，但没法获取到包含文章内容的html。 花了一个小时来研究怎么获取页面，最后还是失败了。 requests首先按照一般思路，使用requests库来获取页面，但是获取到的却是不含有文章内容的一堆js代码和css代码，以及少量的没有内容的html。 去查看Ajax请求，有4个请求，其中三个都是没有文章内容的json，而第一个请求也是最可疑的一个，无法预览。 第一个请求的接口： 1https://mp.weixin.qq.com/mp/appmsgreport?action=page_time&amp;__biz=MzAwNjA3Nzg0MA==&amp;uin=&amp;key=&amp;pass_ticket=&amp;wxtoken=777&amp;devicetype=&amp;clientversion=&amp;appmsg_token=&amp;x5=0&amp;f=json 这是以POST方式访问的接口，下面一大堆的Form data，这其中甚至还有文章的标题！ 也就是说在访问这个接口之前，就已经得知了文章的内容了吗？ selenium我觉得模拟请求太过于复杂，于是尝试使用selenium来获取。 但是得到的内容和上文说的一样，并没有什么不同。非常奇怪。加了60秒的延时让它充分渲染也没用，问题不在这里。 教训后来输出到文件才发现，内容并没有少，确确实实地获取到了文章内容，但是由于print出来的字符数有限制，无法在控制台显示完，才导致我以为获取失败。当个教训吧。]]></content>
       <categories>
         <category>过程记录</category>
       </categories>
